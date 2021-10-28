@@ -36,6 +36,7 @@ async function main() {
 
   let scanFinalizedHeight = await getNextScanHeight();
   while (true) {
+    logger.log('Scanning');
     await sleep(0);
     // chainHeight is the current on-chain last block height
     const finalizedHeight = getLatestFinalizedHeight();

@@ -4,11 +4,10 @@
 FROM node:16
 
 # create & set working directory
-RUN mkdir -p /usr/src
-WORKDIR /usr/src
+RUN mkdir -p /app
+WORKDIR /app
 # copy source files
-COPY . /usr/src
-
+COPY . /app
 # install dependencies
 RUN yarn install
-CMD yarn run scan
+CMD yarn run deploy:priceDot
