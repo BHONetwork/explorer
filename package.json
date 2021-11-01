@@ -24,6 +24,7 @@
     }
   },
   "dependencies": {
+    "@bholdus/api-options": "^0.0.1",
     "prettier": "^2.2.1"
   }
 }

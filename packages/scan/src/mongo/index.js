@@ -67,6 +67,7 @@ async function getCollection(colName) {
 }
 
 async function initDb() {
+  console.log("Init db");
   client = await MongoClient.connect(mongoUrl, {
     useUnifiedTopology: true,
   });
@@ -96,6 +97,7 @@ async function initDb() {
     dailyAssetStatisticCollectionName
   );
 
+  console.log("Create indexes");
   await _createIndexes();
 }
 

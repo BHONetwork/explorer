@@ -23,30 +23,37 @@ const scanStep = parseInt(process.env.SCAN_STEP) || 100;
 
 async function main() {
   await initDb();
+  console.log("Init db done");
   await updateHeight();
 
   if (isUseMeta()) {
+    console.log("Use meta");
     await updateSpecs();
     const specHeights = getSpecHeights();
+    console.log(JSON.stringify(specHeights));
     if (specHeights.length <= 0 || specHeights[0] > 1) {
-      logger.error("No specHeights or invalid");
+      console.error("No specHeights or invalid");
       return;
     }
   }
 
   let scanFinalizedHeight = await getNextScanHeight();
+  console.log("scanFinalizedHeight height:" + scanFinalizedHeight);
+
   while (true) {
-    logger.log('Scanning');
+    console.log("Scanning");
     await sleep(0);
     // chainHeight is the current on-chain last block height
     const finalizedHeight = getLatestFinalizedHeight();
-
+    console.log("Finalised height:" + finalizedHeight);
     if (scanFinalizedHeight >= finalizedHeight) {
+      console.log("Update unfinalised");
       await updateUnFinalized();
     }
 
     if (scanFinalizedHeight > finalizedHeight) {
       // Just wait if the to scan height greater than current chain height
+      console.log("Wait to scan higher block");
       await sleep(3000);
       continue;
     }
@@ -55,9 +62,11 @@ async function main() {
     // Retrieve & Scan no more than 100 blocks at a time
     if (scanFinalizedHeight + scanStep < finalizedHeight) {
       targetHeight = scanFinalizedHeight + scanStep;
+      console.log("Target height:" + targetHeight);
     }
 
     const specHeights = getSpecHeights();
+    console.log("Specs height:" + JSON.stringify(specHeights));
     if (targetHeight > last(specHeights)) {
       await updateSpecs();
     }
@@ -66,8 +75,9 @@ async function main() {
     for (let i = scanFinalizedHeight; i <= targetHeight; i++) {
       heights.push(i);
     }
-
+    // console.log(JSON.stringify(heights));
     const blocks = await fetchBlocks(heights);
+    // console.log('Blocks:'+JSON.stringify(blocks));
     if ((blocks || []).length <= 0) {
       await sleep(1000);
       continue;
@@ -75,17 +85,19 @@ async function main() {
 
     const minHeight = blocks[0].height;
     const maxHeight = blocks[(blocks || []).length - 1].height;
+    console.log("Min height:" + minHeight + ", max height:" + maxHeight);
     const updateAddrHeight = finalizedHeight - 100;
     if (minHeight <= updateAddrHeight && maxHeight >= updateAddrHeight) {
       const block = (blocks || []).find((b) => b.height === updateAddrHeight);
       await updateAllRawAddrs(block.block);
-      logger.info(`Accounts updated at ${updateAddrHeight}`);
+      console.info(`Accounts updated at ${updateAddrHeight}`);
     } else if (maxHeight >= finalizedHeight && maxHeight % 100 === 0) {
       const block = blocks[(blocks || []).length - 1];
       await updateAllRawAddrs(block.block);
     }
 
     for (const block of blocks) {
+      // console.log('Saving block:'+block.height);
       await withSession(async (session) => {
         session.startTransaction();
         try {
@@ -96,24 +108,25 @@ async function main() {
 
           await session.commitTransaction();
         } catch (e) {
-          logger.error(`Error with block scan ${block.height}`, e);
+          console.error(`Error with block scan ${block.height}`, e);
           await session.abortTransaction();
           await sleep(3000);
         }
 
         scanFinalizedHeight = block.height + 1;
 
-        if (block.height % 10000 === 0) {
-          process.exit(0);
-        }
+        // if (block.height % 10000 === 0) {
+        //   process.exit(0);
+        // }
       });
     }
 
-    logger.info(`block ${scanFinalizedHeight - 1} done`);
+    console.info(`block ${scanFinalizedHeight - 1} done`);
   }
 }
 
 async function scanBlock(blockInfo, session) {
+  console.log("Blockinfo:" + JSON.stringify(blockInfo));
   const blockIndexer = getBlockIndexer(blockInfo.block);
   if (isNewDay(blockIndexer.blockTime)) {
     await makeAssetStatistics(getLastBlockIndexer());

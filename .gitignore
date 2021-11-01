@@ -5,3 +5,7 @@ log
 .idea
 
 *-image.sh
+*package-lock.json
+packages/next/package-lock.json
+.vscode
+docker-data/*

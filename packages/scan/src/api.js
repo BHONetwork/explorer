@@ -1,5 +1,5 @@
 const { ApiPromise, WsProvider } = require("@polkadot/api");
-
+const getApiOptions = require("@bholdus/api-options");
 let provider = null;
 let api = null;
 
@@ -11,9 +11,9 @@ async function getApi() {
     }
 
     console.log(`Connect to endpoint:`, wsEndpoint);
-
+    console.log(JSON.stringify(getApiOptions));
     provider = new WsProvider(wsEndpoint, 1000);
-    api = await ApiPromise.create({ provider });
+    api = await ApiPromise.create(getApiOptions({ provider }));
   }
 
   return api;
