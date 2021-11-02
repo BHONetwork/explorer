@@ -102,8 +102,13 @@ function setApi(targetApi) {
   api = targetApi;
 }
 
+function isApiConnected() {
+  return provider && provider.isConnected;
+}
+
 module.exports = {
   getApi,
   disconnect,
   setApi,
+  isApiConnected,
 };
