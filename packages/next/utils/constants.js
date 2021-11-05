@@ -5,11 +5,11 @@ export const DEFAULT_THEME_LOGO = "logo-img-1.svg";
 
 export const nodes = [
   {
-    name: "Statemine",
-    sub: "Kusama",
+    name: "Bholdus",
+    sub: "Bholdus",
     value: "statemine",
-    symbol: "KSM",
-    icon: "/imgs/icons/kusama.svg",
+    symbol: "BHO",
+    icon: "/imgs/icons/logo-bholdus.png",
     color: "#3765DC",
     colorSecondary: "#EAF0FF",
     buttonColor: "#000000",

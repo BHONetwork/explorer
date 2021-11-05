@@ -164,9 +164,9 @@ export default function Overview({ node, overviewData, price }) {
       </ItemWrapper>
       <Divider />
       <div />
-      <ChartWrapper>
+      {/* <ChartWrapper>
         <LineChart token={token} data={chartData} color={color} />
-      </ChartWrapper>
+      </ChartWrapper> */}
     </Wrapper>
   );
 }

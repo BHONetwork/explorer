@@ -171,7 +171,7 @@ export default function Header({ node }) {
           <Link href={`/`} passHref>
             <img
               className="logo-full"
-              src="/imgs/logo.svg"
+              src="/imgs/logo_explorer.png"
               alt="logo"
               style={{ cursor: "pointer" }}
             />
@@ -179,7 +179,7 @@ export default function Header({ node }) {
           <Link href={`/`} passHref>
             <img
               className="logo-s"
-              src="/imgs/logo-s.svg"
+              src="/imgs/logo_explorer.png"
               alt="logo"
               style={{ cursor: "pointer" }}
             />
@@ -210,7 +210,7 @@ export default function Header({ node }) {
         </FlexWrapper>
         <FlexWrapper>
           <SearchS />
-          <NodeSwitcher node={node} />
+          {/* <NodeSwitcher node={node} /> */}
         </FlexWrapper>
       </Wrapper>
       {isHomePage && <Subheader node={node} />}

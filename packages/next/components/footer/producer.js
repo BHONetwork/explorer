@@ -29,15 +29,15 @@ export default function Producer() {
   return (
     <Wrapper>
       <Wrapper>
-        <Text>{`© ${new Date().getFullYear()} Statescan`}</Text>
-        <Text>·</Text>
+        <Text>{`© ${new Date().getFullYear()} Bholdus`}</Text>
+        {/* <Text>·</Text>
         <Text>Powered by</Text>
-        <img src="/imgs/logo-opensquare.svg" alt="opensquare" />
+        <img src="/imgs/logo-opensquare.svg" alt="opensquare" /> */}
       </Wrapper>
-      <Wrapper>
+      {/* <Wrapper>
         <Text>· &nbsp;Funded by</Text>
         <img src="/imgs/logo-kusamadotreasury.svg" alt="kusama dotreasury" />
-      </Wrapper>
+      </Wrapper> */}
     </Wrapper>
   );
 }

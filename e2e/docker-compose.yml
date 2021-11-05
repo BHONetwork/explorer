@@ -13,7 +13,6 @@ services:
       - ../packages/scan:/app
     depends_on:
       - mongodb
-      - blockchain
 
   price:
     build: ../packages/price
@@ -27,6 +26,7 @@ services:
       - 6001:6001
     depends_on:
       - scan
+      - mongodb
   mongodb:
     build: ./mongo
     restart: always

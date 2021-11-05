@@ -39,7 +39,8 @@ async function main() {
 
   let scanFinalizedHeight = await getNextScanHeight();
   console.log("scanFinalizedHeight height:" + scanFinalizedHeight);
-
+  let blocks;
+  let heights;
   while (true) {
     console.log("Scanning");
     await sleep(0);
@@ -71,12 +72,12 @@ async function main() {
       await updateSpecs();
     }
 
-    const heights = [];
+    heights = [];
     for (let i = scanFinalizedHeight; i <= targetHeight; i++) {
       heights.push(i);
     }
     // console.log(JSON.stringify(heights));
-    const blocks = await fetchBlocks(heights);
+    blocks = await fetchBlocks(heights);
     // console.log('Blocks:'+JSON.stringify(blocks));
     if ((blocks || []).length <= 0) {
       await sleep(1000);
@@ -122,11 +123,13 @@ async function main() {
     }
 
     console.info(`block ${scanFinalizedHeight - 1} done`);
+    blocks = null;
+    heights = null;
   }
 }
 
 async function scanBlock(blockInfo, session) {
-  console.log("Blockinfo:" + JSON.stringify(blockInfo));
+  // console.log("Blockinfo:" + JSON.stringify(blockInfo));
   const blockIndexer = getBlockIndexer(blockInfo.block);
   if (isNewDay(blockIndexer.blockTime)) {
     await makeAssetStatistics(getLastBlockIndexer());

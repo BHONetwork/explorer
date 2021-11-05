@@ -16,9 +16,18 @@ NProgress.configure({
   showSpinner: false,
 });
 
-Router.events.on("routeChangeStart", (url, { shallow }) => !shallow && NProgress.start());
-Router.events.on("routeChangeComplete", (url, { shallow }) => !shallow && NProgress.done());
-Router.events.on("routeChangeError", (url, { shallow }) => !shallow && NProgress.done());
+Router.events.on(
+  "routeChangeStart",
+  (url, { shallow }) => !shallow && NProgress.start()
+);
+Router.events.on(
+  "routeChangeComplete",
+  (url, { shallow }) => !shallow && NProgress.done()
+);
+Router.events.on(
+  "routeChangeError",
+  (url, { shallow }) => !shallow && NProgress.done()
+);
 
 function MyApp({ Component, pageProps }) {
   const node = useNode();
@@ -31,10 +40,10 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Kusama | Polkadot Asset Explorer</title>
+        <title>Bholdus Asset Explorer</title>
         <meta
           name="description"
-          content="Statescan allows you to explorer and search the Kusama | Polkadot blockchain for assets."
+          content="Bholdus blockchain data and asset explorer"
         />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
       </Head>

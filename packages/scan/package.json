@@ -8,13 +8,10 @@
     "statemine": "pm2-runtime start ecosystem.config.js --only statescan-scan-statemine --env production",
     "westmintStaging": "pm2-runtime start ecosystem.config.js --only statescan-scan-westmint-staging --env production",
     "statemineStaging": "pm2-runtime start ecosystem.config.js --only statescan-scan-statemine-staging --env production",
-    "scan": "node src/index.js",
+    "scan": "node --inspect src/index.js",
     "test": "jest src"
   },
   "dependencies": {
-    "@bholdus/api-options": "^0.0.1",
-    "@types/node": "^16.11.6",
-    "@bholdus/types": "^0.0.1",
     "@polkadot/api": "6.5.3-3",
     "bignumber.js": "^9.0.1",
     "dotenv": "^10.0.0",

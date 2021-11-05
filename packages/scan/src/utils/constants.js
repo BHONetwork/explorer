@@ -2,6 +2,7 @@ const Modules = Object.freeze({
   System: "system",
   Balances: "balances",
   Assets: "assets",
+  Tokens: "tokens",
 });
 
 const SystemEvents = Object.freeze({

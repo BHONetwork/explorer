@@ -28,7 +28,7 @@ async function saveNewAssetTransfer(
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
-    { assetId, destroyedAt: null },
+    { assetId: parseAssetId(assetId), destroyedAt: null },
     { session }
   );
   if (!asset) {
@@ -53,13 +53,15 @@ async function saveNewAssetTransfer(
 }
 
 async function updateOrCreateAsset(blockIndexer, assetId) {
+  console.log("updateOrCreateAsset:" + JSON.stringify(assetId));
   const asset = await getAssetsAsset(blockIndexer.blockHash, assetId);
   const metadata = await getAssetsMetadata(blockIndexer.blockHash, assetId);
+  console.log("Asset: " + JSON.stringify(asset));
 
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
   const result = await col.updateOne(
-    { assetId, destroyedAt: null },
+    { assetId: parseAssetId(assetId), destroyedAt: null },
     {
       $setOnInsert: {
         createdAt: blockIndexer,
@@ -90,15 +92,17 @@ async function saveAssetTimeline(
 
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
+  const clonedEventData = Object.assign({}, eventData);
+  clonedEventData[0] = parseAssetId(clonedEventData[0]);
   const result = await col.updateOne(
-    { assetId, destroyedAt: null },
+    { assetId: parseAssetId(assetId), destroyedAt: null },
     {
       $push: {
         timeline: {
           type: "event",
           section,
           method,
-          eventData,
+          eventData: eventData,
           eventIndexer: blockIndexer,
           eventSort,
           extrinsicIndex,
@@ -120,7 +124,7 @@ async function destroyAsset(blockIndexer, assetId) {
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
   const result = await col.updateOne(
-    { assetId },
+    { assetId: parseAssetId(assetId) },
     {
       $set: {
         destroyedAt: blockIndexer,
@@ -140,7 +144,7 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
-    { assetId, destroyedAt: null },
+    { assetId: parseAssetId(assetId), destroyedAt: null },
     { session }
   );
   if (!asset) {
@@ -176,7 +180,7 @@ async function updateOrCreateApproval(blockIndexer, assetId, owner, delegate) {
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
-    { assetId, destroyedAt: null },
+    { assetId: parseAssetId(assetId), destroyedAt: null },
     { session }
   );
   if (!asset) {
@@ -201,7 +205,7 @@ async function updateOrCreateApproval(blockIndexer, assetId, owner, delegate) {
 }
 
 function isAssetsEvent(section) {
-  return section === Modules.Assets;
+  return section === Modules.Tokens;
 }
 
 async function handleAssetsEvent(
@@ -316,6 +320,13 @@ async function handleAssetsEvent(
   }
 
   return true;
+}
+
+function parseAssetId(assetId) {
+  if (assetId.dexShare !== undefined) {
+    return assetId.dexShare[0].token.token.id;
+  }
+  return assetId.token.token.id;
 }
 
 module.exports = {
