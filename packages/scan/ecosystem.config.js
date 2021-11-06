@@ -1,6 +1,8 @@
 const commonPart = {
   script: "src/index.js",
+  max_memory_restart: "1500M",
   log_date_format: "YYYY-MM-DD HH:mm Z",
+  watch: ["/src"],
   env: {
     NODE_ENV: "development",
   },
