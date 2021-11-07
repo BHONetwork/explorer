@@ -152,6 +152,8 @@ export function makeTablePairs(keys, vals) {
   result.object_data.map((pair) => {
     if (pair[0] === "Engine" && pair[1] === "0x61757261") {
       pair[1] = "AURA";
+    } else if (pair[0] === "Engine" && pair[1] === "0x42454546") {
+      pair[1] = "BEEFY";
     }
   });
   return result;
