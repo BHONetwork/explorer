@@ -29,15 +29,8 @@ export default function Producer() {
   return (
     <Wrapper>
       <Wrapper>
-        <Text>{`© ${new Date().getFullYear()} Bholdus`}</Text>
-        {/* <Text>·</Text>
-        <Text>Powered by</Text>
-        <img src="/imgs/logo-opensquare.svg" alt="opensquare" /> */}
+        <Text>{`© ${new Date().getFullYear()} Unius Pte Ltd. All Rights Reserved`}</Text>
       </Wrapper>
-      {/* <Wrapper>
-        <Text>· &nbsp;Funded by</Text>
-        <img src="/imgs/logo-kusamadotreasury.svg" alt="kusama dotreasury" />
-      </Wrapper> */}
     </Wrapper>
   );
 }

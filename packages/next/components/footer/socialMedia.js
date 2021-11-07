@@ -32,28 +32,21 @@ export default function SocialMedia() {
   return (
     <Wrapper>
       <Link
-        href="https://github.com/opensquare-network/"
+        href="https://github.com/bholdus/"
         target="_blank"
         referrerPolicy="no-referrer"
       >
         <Github />
       </Link>
       <Link
-        href="https://twitter.com/OpensquareN"
+        href="https://twitter.com/bholdus"
         target="_blank"
         referrerPolicy="no-referrer"
       >
         <Twitter />
       </Link>
-      <Link href="mailto:hi@opensquare.network" target="_blank">
+      <Link href="mailto:support@bholdus.com" target="_blank">
         <Mail />
-      </Link>
-      <Link
-        href="https://app.element.io/#/room/#opensquare:matrix.org"
-        target="_blank"
-        referrerPolicy="no-referrer"
-      >
-        <Element />
       </Link>
     </Wrapper>
   );

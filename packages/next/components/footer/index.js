@@ -28,7 +28,7 @@ export default function Footer() {
       <Container>
         <Wrapper>
           <Producer />
-          {/* <SocialMedia /> */}
+          <SocialMedia />
         </Wrapper>
       </Container>
     </footer>
