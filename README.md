@@ -1,8 +1,9 @@
 # Bholdus asset explorer
 Services:
-1. Scanner: scan (/packages/scan)
-2. UI: explorer (/packages/next)
-3. DB: mongodb
+1. scan: Scan blockchain data and insert into DB (/packages/scan)
+2. explorer: UI for Bholdus blockchain explorer (/packages/next)
+3. mongodb: database for Bholdus chain data
+
 # Getting started
 1. cd e2e
 2. docker-compose build
