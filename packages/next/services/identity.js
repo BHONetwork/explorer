@@ -12,7 +12,7 @@ const delayQuery = debounce(() => {
 
   const chainAddresses = {};
   const idNames = [...pending.keys()];
-  const idNameSplits = idNames.map(item => item.split("/"));
+  const idNameSplits = idNames.map((item) => item.split("/"));
   for (const [chain, address] of idNameSplits) {
     if (!chainAddresses[chain]) {
       chainAddresses[chain] = [];
@@ -23,32 +23,35 @@ const delayQuery = debounce(() => {
   for (const chain in chainAddresses) {
     const addresses = chainAddresses[chain];
 
-    const headers = {"accept": "application/json, text/plain, */*", "content-type": "application/json;charset=UTF-8",};
+    const headers = {
+      accept: "application/json, text/plain, */*",
+      "content-type": "application/json;charset=UTF-8",
+    };
 
-    fetch
-    (`${process.env.NEXT_PUBLIC_IDENTITY_SERVER_HOST}/${chain}/short-ids`, {
-      headers,
-      method: "POST",
-      body: JSON.stringify({addresses})
-    })
-      .then(res => res.json())
-      .then((data) => {
-        const identities = new Map(data.map(item => [item.address, item]));
+    // fetch
+    // (`${process.env.NEXT_PUBLIC_IDENTITY_SERVER_HOST}/${chain}/short-ids`, {
+    //   headers,
+    //   method: "POST",
+    //   body: JSON.stringify({addresses})
+    // })
+    //   .then(res => res.json())
+    //   .then((data) => {
+    //     const identities = new Map(data.map(item => [item.address, item]));
 
-        for (const [idName, [, resolve, reject]] of pending) {
-          const [chainOfIdName, addrOfIdName] = idName.split("/");
-          if (chainOfIdName !== chain) {
-            continue;
-          }
-          const identity = identities.get(addrOfIdName) || null;
-          if (identity) {
-            cachedIdentities.set(idName, identity);
-          }
-          if (resolve) {
-            resolve(identity);
-          }
-        }
-      });
+    //     for (const [idName, [, resolve, reject]] of pending) {
+    //       const [chainOfIdName, addrOfIdName] = idName.split("/");
+    //       if (chainOfIdName !== chain) {
+    //         continue;
+    //       }
+    //       const identity = identities.get(addrOfIdName) || null;
+    //       if (identity) {
+    //         cachedIdentities.set(idName, identity);
+    //       }
+    //       if (resolve) {
+    //         resolve(identity);
+    //       }
+    //     }
+    //   });
   }
 }, 0);
 
@@ -62,11 +65,13 @@ export function fetchIdentity(chain, address) {
 
   if (!pending.has(idName)) {
     pending.set(idName, [
-      new Promise((resolve, reject) => setTimeout(() => {
-        const promise = pending.get(idName);
-        promise.push(resolve, reject);
-        delayQuery();
-      }, 0))
+      new Promise((resolve, reject) =>
+        setTimeout(() => {
+          const promise = pending.get(idName);
+          promise.push(resolve, reject);
+          delayQuery();
+        }, 0)
+      ),
     ]);
   }
 

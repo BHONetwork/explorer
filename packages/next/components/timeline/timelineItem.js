@@ -198,6 +198,13 @@ function formatBalance(balance, asset) {
 }
 
 export default function TimelineItem({ data, asset }) {
+  const parseAssetId = (assetId) => {
+    if (assetId.dexShare !== undefined) {
+      return assetId.dexShare[0].token.token.id;
+    }
+    return assetId.token.token.id;
+  };
+
   const getTitle = (timelineItem) =>
     Titles[timelineItem.method] || timelineItem.method;
 
@@ -208,7 +215,7 @@ export default function TimelineItem({ data, asset }) {
       case "Created": {
         const [assetId, admin] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Admin: (
             <CopyText text={admin}>
               <Address address={admin} to={`/account/${admin}`} />
@@ -220,7 +227,7 @@ export default function TimelineItem({ data, asset }) {
       case "ForceCreated": {
         const [assetId, admin] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Admin: (
             <CopyText text={admin}>
               <Address address={admin} to={`/account/${admin}`} />
@@ -233,7 +240,7 @@ export default function TimelineItem({ data, asset }) {
       case "MetadataSet": {
         const [assetId, name, symbol, decimals] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Symbol: <FieldText>{timelineItem.asset.symbol}</FieldText>,
           Name: <FieldText>{timelineItem.asset.name}</FieldText>,
           Decimals: decimals,
@@ -242,13 +249,13 @@ export default function TimelineItem({ data, asset }) {
       case "MetadataCleared": {
         const [assetId] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
         };
       }
       case "AssetStatusChanged": {
         const [assetId] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Admin: (
             <CopyText text={timelineItem.asset.admin}>
               <Address
@@ -289,7 +296,7 @@ export default function TimelineItem({ data, asset }) {
       case "TeamChanged": {
         const [assetId, issuer, admin, freezer] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Admin: (
             <CopyText text={admin}>
               <Address address={admin} to={`/account/${admin}`} />
@@ -310,7 +317,7 @@ export default function TimelineItem({ data, asset }) {
       case "OwnerChanged": {
         const [assetId, owner] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Admin: (
             <CopyText text={owner}>
               <Address address={owner} to={`/account/${owner}`} />
@@ -321,25 +328,25 @@ export default function TimelineItem({ data, asset }) {
       case "AssetFrozen": {
         const [assetId] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
         };
       }
       case "AssetThawed": {
         const [assetId] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
         };
       }
       case "Destroyed": {
         const [assetId] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
         };
       }
       case "Issued": {
         const [assetId, beneficiary, amount] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Beneficiary: (
             <CopyText text={beneficiary}>
               <Address address={beneficiary} to={`/account/${beneficiary}`} />
@@ -351,7 +358,7 @@ export default function TimelineItem({ data, asset }) {
       case "Burned": {
         const [assetId, who, amount] = timelineItem.eventData;
         return {
-          "Asset ID": <FieldText>{`#${assetId.token.token.id}`}</FieldText>,
+          "Asset ID": <FieldText>{`#${parseAssetId(assetId)}`}</FieldText>,
           Who: (
             <CopyText text={who}>
               <Address address={who} to={`/account/${who}`} />

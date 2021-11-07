@@ -145,10 +145,16 @@ export function zip(arrLeft, arrRight) {
 }
 
 export function makeTablePairs(keys, vals) {
-  return {
+  const result = {
     object_type: "table_pairs",
     object_data: zip(keys, vals),
   };
+  result.object_data.map((pair) => {
+    if (pair[0] === "Engine" && pair[1] === "0x61757261") {
+      pair[1] = "AURA";
+    }
+  });
+  return result;
 }
 
 export function isNoIdentity(identity) {

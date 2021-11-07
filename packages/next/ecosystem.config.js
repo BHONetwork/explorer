@@ -6,6 +6,7 @@ module.exports = {
       interpreter: "bash",
       args: "start",
       log_date_format: "YYYY-MM-DD HH:mm Z",
+      watch: ["*.js"],
       env: {
         NODE_ENV: "development",
       },

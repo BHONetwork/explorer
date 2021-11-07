@@ -131,10 +131,10 @@ const menus = [
     name: "Transfers",
     value: "transfers",
   },
-  {
-    name: "Teleports",
-    value: "teleports",
-  },
+  // {
+  //   name: "Teleports",
+  //   value: "teleports",
+  // },
   {
     name: "Accounts",
     value: "accounts",
@@ -169,7 +169,7 @@ export default function SubMenu({ closeMenu }) {
   return (
     <Wrapper onMouseOver={onMouseOver} onMouseLeave={onMouseLeave}>
       <TitleWrapper isActive={isActive} themecolor={theme.color}>
-        BlockChain
+        Blockchain
         <ArrowDown />
       </TitleWrapper>
       {(isActive || width <= 900) && (
