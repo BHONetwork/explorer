@@ -140,7 +140,6 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     assetId,
     address
   );
-
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
@@ -160,8 +159,8 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     {
       $set: {
         ...account,
-        balance: toDecimal128(account.balance),
-        dead: account.balance === 0 ? true : false,
+        balance: toDecimal128(account.free),
+        dead: account.free === 0 ? true : false,
         lastUpdatedAt: blockIndexer,
       },
     },
