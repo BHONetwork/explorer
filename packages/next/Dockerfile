@@ -8,8 +8,9 @@ RUN mkdir -p /app
 WORKDIR /app
 # copy source files
 COPY . /app
-
+COPY run.sh /app/run.sh
+RUN chmod +x ./run.sh
 # install dependencies
 RUN npm install
 RUN npm run build
-CMD npm run dev
+CMD ./run.sh

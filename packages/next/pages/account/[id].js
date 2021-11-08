@@ -361,16 +361,17 @@ export async function getServerSideProps(context) {
     nextApi.fetch(`addresses/${id}/teleports`, {
       page: activeTab === "teleports" ? nPage - 1 : 0,
     }),
-    fetch(
-      `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_HOST}/${relayChain}/short-ids`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ addresses: [id] }),
-      }
-    )
-      .then((res) => res.json())
-      .catch(() => null),
+    {},
+    // fetch(
+    //   `${process.env.NEXT_PUBLIC_IDENTITY_SERVER_HOST}/${relayChain}/short-ids`,
+    //   {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ addresses: [id] }),
+    //   }
+    // )
+    //   .then((res) => res.json())
+    //   .catch(() => null),
   ]);
 
   return {
