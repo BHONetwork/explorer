@@ -41,6 +41,21 @@ async function main() {
   console.log("scanFinalizedHeight height:" + scanFinalizedHeight);
   let blocks;
   let heights;
+  // Cronjob to detect if process stall and kill if no change in synced block
+  let last_synced_block = 0;
+  setInterval(async () => {
+    console.log("Interval check running...");
+    const latest_block = await getLatestFinalizedHeight();
+    if (latest_block === last_synced_block) {
+      console.error(
+        "No block scanned in the last 60 seconds. Restarting app..."
+      );
+      process.exit(0);
+    } else {
+      last_synced_block = latest_block;
+    }
+  }, 60000);
+  // Main cronjob to sync block data
   while (true) {
     console.log("Scanning");
     await sleep(0);
@@ -89,6 +104,7 @@ async function main() {
     console.log("Min height:" + minHeight + ", max height:" + maxHeight);
     const updateAddrHeight = finalizedHeight - 100;
     if (minHeight <= updateAddrHeight && maxHeight >= updateAddrHeight) {
+      logger.info(`To update accounts at ${updateAddrHeight}`);
       const block = (blocks || []).find((b) => b.height === updateAddrHeight);
       await updateAllRawAddrs(block.block);
       console.info(`Accounts updated at ${updateAddrHeight}`);
@@ -120,10 +136,6 @@ async function main() {
         }
 
         scanFinalizedHeight = block.height + 1;
-
-        // if (block.height % 10000 === 0) {
-        //   process.exit(0);
-        // }
       });
     }
 
