@@ -3,24 +3,12 @@ const polkadotTypes = require("@polkadot/types");
 
 let provider = null;
 let api = null;
-const types = require("@bholdus/types");
 async function getApi() {
-  // let fs = require('fs');
-  // fs.writeFile('polkatypes.txt', JSON.stringify(polkadotTypes), function (err) {
-  //   if (err) return console.log(err);
-  //   console.log('polkadotTypes > types.txt');
-  // });
-  // fs.writeFile('bhotypes.txt', JSON.stringify(types), function (err) {
-  //   if (err) return console.log(err);
-  //   console.log('BHO types > types.txt');
-  // });
-
   if (!api) {
     const wsEndpoint = process.env.WS_ENDPOINT;
     if (!wsEndpoint) {
       throw new Error("WS_ENDPOINT not set");
     }
-    console.log("Types:" + JSON.stringify(types));
     console.log(`Connect to endpoint:`, wsEndpoint);
     provider = new WsProvider(wsEndpoint, 1000);
     const apiOps = {
