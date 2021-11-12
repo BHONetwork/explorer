@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { disconnect, isApiConnected } = require("./api");
+const { disconnect, isApiConnected, getApi } = require("./api");
 const { updateHeight, getLatestFinalizedHeight } = require("./chain");
 const { getNextScanHeight, updateScanHeight } = require("./mongo/scanHeight");
 const { sleep } = require("./utils/sleep");
@@ -45,7 +45,7 @@ async function main() {
   let last_synced_block = 0;
   setInterval(async () => {
     console.log("Interval check running...");
-    const latest_block = await getLatestFinalizedHeight();
+    const latest_block = await getNextScanHeight();
     if (latest_block === last_synced_block) {
       console.error(
         "No block scanned in the last 60 seconds. Restarting app..."
