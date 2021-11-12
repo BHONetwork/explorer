@@ -112,7 +112,7 @@ export function getPrecision(symbol) {
     case "DOT":
       return 10;
     default:
-      return 12;
+      return 18;
   }
 }
 

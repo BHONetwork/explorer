@@ -219,7 +219,6 @@ async function handleAssetsEvent(
   if (!isAssetsEvent(section)) {
     return false;
   }
-
   const eventData = data.toJSON();
 
   // Save assets
