@@ -19,7 +19,7 @@ const { getLastBlockIndexer, isNewDay } = require("./statistic/date");
 const { updateSpecs, getSpecHeights } = require("./specs");
 const { updateUnFinalized } = require("./unFinalized");
 
-const scanStep = parseInt(process.env.SCAN_STEP) || 100;
+const scanStep = parseInt(process.env.SCAN_STEP) || 10;
 
 async function main() {
   await initDb();

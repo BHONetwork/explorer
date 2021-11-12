@@ -88,7 +88,7 @@ async function getApi() {
 
     api = await ApiPromise.create({
       provider,
-      types: { ...apiOps, ...polkadotTypes },
+      types: apiOps,
     });
   }
 
