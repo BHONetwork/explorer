@@ -24,9 +24,10 @@ async function search(ctx) {
   }
 
   const lowerQ = q.toLowerCase();
-  const isHash = !!lowerQ.match(/^0x[0-9a-f]{64}$/);
-  const isNum = q.match(/^[0-9]+$/);
-  const isAddr = q.match(/^[0-9a-zA-Z]{47,48}$/);
+  const isHash = !!lowerQ.match(/0x[0-9a-f]{64}$/);
+  const isNum = q.match(/[0-9]+$/);
+  const isAddr = q.match(/[0-9a-zA-Z]{47,49}$/);
+  console.log("isHash:" + isHash + ",isNum:" + isNum + ",isAddr:" + isAddr); //..
 
   const assetCol = await getAssetCollection();
   const addressCol = await getAddressCollection();
@@ -34,7 +35,7 @@ async function search(ctx) {
   const extrinsicCol = await getExtrinsicCollection();
 
   const icaseQ = new RegExp(`^${escapeRegex(q)}$`, "i");
-
+  console.log("icaseQ:" + icaseQ);
   const [asset, address, block, extrinsic] = await Promise.all([
     assetCol.findOne(
       {
@@ -46,23 +47,17 @@ async function search(ctx) {
       },
       { projection: { timeline: 0 } }
     ),
-    isAddr ? addressCol.findOne({ address: icaseQ }) : null,
+    isAddr ? addressCol.findOne({ address: q }) : null,
     isNum
       ? blockCol.findOne(
           { "header.number": Number(q) },
           { projection: { extrinsics: 0 } }
         )
       : isHash
-      ? blockCol.findOne(
-          { hash: lowerQ },
-          { projection: { extrinsics: 0 } }
-        )
+      ? blockCol.findOne({ hash: lowerQ }, { projection: { extrinsics: 0 } })
       : null,
     isHash
-      ? extrinsicCol.findOne(
-          { hash: lowerQ },
-          { projection: { data: 0 } }
-        )
+      ? extrinsicCol.findOne({ hash: lowerQ }, { projection: { data: 0 } })
       : null,
   ]);
 
@@ -87,35 +82,35 @@ async function searchAutoComplete(ctx) {
   }
 
   const lowerQ = prefix.toLowerCase();
-  const isHash = !!lowerQ.match(/^0x[0-9a-f]{6,64}$/);
-  const isNum = prefix.match(/^[0-9]+$/);
+  const isHash = !!lowerQ.match(/0x[0-9a-f]{6,64}$/);
+  const isNum = prefix.match(/[0-9]+$/);
 
   const assetCol = await getAssetCollection();
   const addressCol = await getAddressCollection();
   const blockCol = await getBlockCollection();
 
-  const prefixPattern = new RegExp(`^${escapeRegex(lowerQ)}`, "i");
+  const prefixPattern = new RegExp(`${escapeRegex(lowerQ)}`, "i");
 
   const [assets, addresses, blocks] = await Promise.all([
     prefix.length >= 2
-      ? assetCol.find(
-          {
-            $or: [
-              { name: prefixPattern },
-              { symbol: prefixPattern },
-              ...(isNum ? [{ assetId: Number(prefix) }] : []),
-            ],
-          },
-          { projection: { timeline: 0 } }
-        )
-        .sort({ name: 1 })
-        .limit(10)
-        .toArray()
+      ? assetCol
+          .find(
+            {
+              $or: [
+                { name: prefixPattern },
+                { symbol: prefixPattern },
+                ...(isNum ? [{ assetId: Number(prefix) }] : []),
+              ],
+            },
+            { projection: { timeline: 0 } }
+          )
+          .sort({ name: 1 })
+          .limit(10)
+          .toArray()
       : isNum
-      ? assetCol.find(
-          { assetId: Number(prefix) },
-          { projection: { timeline: 0 } }
-        ).toArray()
+      ? assetCol
+          .find({ assetId: Number(prefix) }, { projection: { timeline: 0 } })
+          .toArray()
       : [],
     prefix.length >= 4
       ? addressCol
@@ -125,15 +120,16 @@ async function searchAutoComplete(ctx) {
           .toArray()
       : [],
     isNum
-      ? blockCol.find(
-          { "header.number": Number(prefix) },
-          { projection: { extrinsics: 0 } }
-        ).toArray()
+      ? blockCol
+          .find(
+            { "header.number": Number(prefix) },
+            { projection: { extrinsics: 0 } }
+          )
+          .toArray()
       : isHash
-      ? blockCol.find(
-          { hash: prefixPattern },
-          { projection: { extrinsics: 0 } }
-        ).toArray()
+      ? blockCol
+          .find({ hash: prefixPattern }, { projection: { extrinsics: 0 } })
+          .toArray()
       : [],
   ]);
 

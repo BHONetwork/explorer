@@ -2,11 +2,14 @@ module.exports = {
   apps: [
     {
       name: "statescan-next",
-      script: "yarn",
-      interpreter: "bash",
-      args: "start",
+      script: "server.js",
       log_date_format: "YYYY-MM-DD HH:mm Z",
-      watch: ["*.js"],
+      watch: true,
+      watch_delay: 1000,
+      watch_options: {
+        followSymlinks: false,
+      },
+      ignore_watch: ["node_modules", ".next"],
       env: {
         NODE_ENV: "development",
       },
