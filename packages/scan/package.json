@@ -12,6 +12,7 @@
     "test": "jest src"
   },
   "dependencies": {
+    "@bholdus/api-options": "^0.2.0",
     "@bholdus/types": "^0.1.0",
     "@polkadot/api": "6.8.1",
     "bignumber.js": "^9.0.1",

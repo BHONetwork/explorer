@@ -19,6 +19,8 @@ const assetHolderCollectionName = "assetHolder";
 const addressCollectionName = "address";
 const approvalCollectionName = "approval";
 const teleportCollectionMame = "teleport";
+const nftClassCollectionName = "nftClass";
+const nftTokenCollectionName = "nftToken";
 
 // unFinalized collection names
 const unFinalizedCollectionName = "unFinalizedBlock";
@@ -43,6 +45,8 @@ let rawAddressCol = null;
 let addressCol = null;
 let approvalCol = null;
 let teleportCol = null;
+let nftClassCol = null;
+let nftTokenCol = null;
 
 // unFinalized collections
 let unFinalizedBlockCol = null;
@@ -88,6 +92,9 @@ async function initDb() {
   addressCol = await getCollection(addressCollectionName);
   approvalCol = await getCollection(approvalCollectionName);
   teleportCol = await getCollection(teleportCollectionMame);
+  nftClassCol = await getCollection(nftClassCollectionName);
+  nftTokenCol = await getCollection(nftTokenCollectionName);
+
   unFinalizedBlockCol = await getCollection(unFinalizedCollectionName);
   unFinalizedExtrinsicCol = await getCollection(
     unFinalizedExtrinsicCollectionName
@@ -195,6 +202,17 @@ function withSession(fn) {
   return client.withSession(fn);
 }
 
+// NFT
+async function getNFTClassCollection() {
+  await tryInit(nftClassCol);
+  return nftClassCol;
+}
+
+async function getNFTTokenCollection() {
+  await tryInit(nftTokenCol);
+  return nftTokenCol;
+}
+
 module.exports = {
   initDb,
   getStatusCollection,
@@ -213,4 +231,6 @@ module.exports = {
   getUnFinalizedEventCollection,
   getDailyAssetStatisticCollection,
   withSession,
+  getNFTClassCollection,
+  getNFTTokenCollection,
 };

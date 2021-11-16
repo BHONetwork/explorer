@@ -3,6 +3,7 @@ const Modules = Object.freeze({
   Balances: "balances",
   Assets: "assets",
   Tokens: "tokens",
+  NFT: "nft",
 });
 
 const SystemEvents = Object.freeze({
@@ -46,9 +47,15 @@ const AssetsEvents = Object.freeze({
   Burned: "Burned",
 });
 
+const NFTEvents = Object.freeze({
+  ClassCreated: "CreatedClass",
+  TokenMinted: "MintedToken",
+});
+
 module.exports = {
   Modules,
   SystemEvents,
   BalancesEvents,
   AssetsEvents,
+  NFTEvents,
 };

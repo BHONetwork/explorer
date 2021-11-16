@@ -6,6 +6,7 @@ const { handleBalancesEvent } = require("./balance");
 const { handleExecutedDownwardEvent } = require("./dmpQueue");
 const { handleSystemEvent } = require("./system");
 const { handleXcmAttemptedEvent } = require("./polkadotXcm");
+const { handleNFTsEvent } = require("./nft");
 
 async function handleEvents(events, blockIndexer, extrinsics) {
   if (events.length <= 0) {
@@ -22,6 +23,13 @@ async function handleEvents(events, blockIndexer, extrinsics) {
       const extrinsicIndex = phaseValue;
 
       await handleAssetsEvent(
+        event,
+        sort,
+        extrinsicIndex,
+        extrinsicHash,
+        blockIndexer
+      );
+      await handleNFTsEvent(
         event,
         sort,
         extrinsicIndex,

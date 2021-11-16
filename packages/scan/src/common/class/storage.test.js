@@ -1,14 +1,13 @@
 const { getClassByHeight } = require("./storage");
-const { setApi } = require("../../../api");
-const { elaraStatemine } = require("../../../testCommon/constants");
+const { setApi } = require("../../api");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
 
 describe("Query class details", () => {
   let api;
   let provider;
-
+  //wss://pub.elara.patract.io/statemine
   beforeAll(async () => {
-    provider = new WsProvider(elaraStatemine, 1000);
+    provider = new WsProvider("wss://pub.elara.patract.io/statemine", 1000);
     api = await ApiPromise.create({ provider });
     setApi(api);
   });
