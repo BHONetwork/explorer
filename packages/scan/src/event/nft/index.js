@@ -1,7 +1,11 @@
 const { hexToString } = require("@polkadot/util");
-const { getNFTClassCollection, getNFTTokenCollection } = require("../../mongo");
+const {
+  getNFTClassCollection,
+  getNFTTokenCollection,
+  getNFTDataCollection,
+} = require("../../mongo");
 const asyncLocalStorage = require("../../asynclocalstorage");
-const { getNFTClass, getLastTokenInGroup, getToken } = require("./nftStorage");
+const { getNFTClass, getToken } = require("./nftStorage");
 const { Modules, NFTEvents } = require("../../utils/constants");
 
 async function updateOrCreateNFTClass(blockIndexer, classId) {
@@ -37,33 +41,44 @@ async function updateOrCreateNFTTokens(
   to,
   groupId,
   classId,
+  startTokenId,
   quantity
 ) {
-  const lastToken = await getLastTokenInGroup(
-    blockIndexer.blockHash,
-    groupId,
-    classId
-  );
-  const [owner, tokenId] = lastToken;
-  console.log("Last tokens: " + JSON.stringify(lastToken));
-
   // Get token details
-  const tokenDetails = await getToken(blockIndexer.blockHash, classId, tokenId);
+  const tokenDetails = await getToken(
+    blockIndexer.blockHash,
+    classId,
+    startTokenId
+  );
+
   const convertedAttr = {};
   for (const [key, value] of Object.entries(tokenDetails.data.attributes)) {
     convertedAttr[hexToString(key)] = hexToString(value);
   }
+
   tokenDetails.data.attributes = convertedAttr;
+  tokenDetails.metadata = hexToString(tokenDetails.metadata);
+  const mediaCol = await getNFTDataCollection();
+
+  // Query and populate IPFS media data to token attributes
+  const mediaData = await mediaCol.findOne({
+    metadata_ipfs: tokenDetails.metadata,
+  });
+  if (mediaData) {
+    tokenDetails.data.attributes.media_type = mediaData.file_type;
+    tokenDetails.data.attributes.media_uri = mediaData.file_cloud;
+  }
+
   console.log("Token details: " + JSON.stringify(tokenDetails));
 
   // Insert into DB
   const session = asyncLocalStorage.getStore();
   const col = await getNFTTokenCollection();
-  for (let i = quantity; i > 0; i--) {
+  for (let i = 0; i < quantity; i++) {
     const result = await col.updateOne(
       {
         classId: classId,
-        tokenId: Number(tokenId) - i,
+        tokenId: Number(startTokenId) + i,
         minter: from,
         groupId: groupId,
         destroyedAt: null,
@@ -107,13 +122,14 @@ async function handleNFTsEvent(
 
   // Save NFT token
   if ([NFTEvents.TokenMinted].includes(method)) {
-    const [from, to, class_id, group_id, quantity] = eventData;
+    const [from, to, group_id, class_id, token_id, quantity] = eventData;
     await updateOrCreateNFTTokens(
       blockIndexer,
       from,
       to,
       group_id,
       class_id,
+      token_id,
       quantity
     );
   }

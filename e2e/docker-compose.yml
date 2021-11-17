@@ -1,7 +1,9 @@
 version: "3.9"
 services:
   blockchain:
-    build: ../../bholdus-chain
+    build:
+      context: ../../bholdus-chain
+      dockerfile: Dockerfile.release
     command: bash -c "/usr/local/bin/bholdus --dev --ws-external"
     ports:
       - 9944:9944

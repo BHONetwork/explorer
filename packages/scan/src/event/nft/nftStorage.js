@@ -7,18 +7,6 @@ async function getNFTClass(blockHash, classId) {
 }
 
 /*
-This will return the last token in the group
-*/
-async function getLastTokenInGroup(blockHash, groupId, classId) {
-  const blockApi = await findBlockApi(blockHash);
-  const raw = await blockApi.query.bholdusSupportNft.tokensByGroup(
-    groupId,
-    classId
-  );
-  return raw.toJSON();
-}
-
-/*
 Return token details including attributes
 */
 async function getToken(blockHash, classId, tokenId) {
@@ -29,6 +17,5 @@ async function getToken(blockHash, classId, tokenId) {
 
 module.exports = {
   getNFTClass,
-  getLastTokenInGroup,
   getToken,
 };
