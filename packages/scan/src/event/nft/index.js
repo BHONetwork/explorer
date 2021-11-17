@@ -58,9 +58,9 @@ async function updateOrCreateNFTTokens(
 
   tokenDetails.data.attributes = convertedAttr;
   tokenDetails.metadata = hexToString(tokenDetails.metadata);
-  const mediaCol = await getNFTDataCollection();
 
   // Query and populate IPFS media data to token attributes
+  const mediaCol = await getNFTDataCollection();
   const mediaData = await mediaCol.findOne({
     metadata_ipfs: tokenDetails.metadata,
   });
