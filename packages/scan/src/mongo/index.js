@@ -22,6 +22,7 @@ const teleportCollectionMame = "teleport";
 const nftClassCollectionName = "nftClass";
 const nftTokenCollectionName = "nftToken";
 const nftDataCollectionName = "nftData";
+const nftGroupOwnerCollectionName = "nftGroupOwner";
 
 // unFinalized collection names
 const unFinalizedCollectionName = "unFinalizedBlock";
@@ -49,6 +50,7 @@ let teleportCol = null;
 let nftClassCol = null;
 let nftTokenCol = null;
 let nftDataCol = null;
+let nftGroupOwnerCol = null;
 
 // unFinalized collections
 let unFinalizedBlockCol = null;
@@ -94,9 +96,12 @@ async function initDb() {
   addressCol = await getCollection(addressCollectionName);
   approvalCol = await getCollection(approvalCollectionName);
   teleportCol = await getCollection(teleportCollectionMame);
+
+  // NFT
   nftClassCol = await getCollection(nftClassCollectionName);
   nftTokenCol = await getCollection(nftTokenCollectionName);
   nftDataCol = await getCollection(nftDataCollectionName);
+  nftGroupOwnerCol = await getCollection(nftGroupOwnerCollectionName);
 
   unFinalizedBlockCol = await getCollection(unFinalizedCollectionName);
   unFinalizedExtrinsicCol = await getCollection(
@@ -221,6 +226,11 @@ async function getNFTDataCollection() {
   return nftDataCol;
 }
 
+async function getNFTGroupOwnerCollection() {
+  await tryInit(nftGroupOwnerCol);
+  return nftGroupOwnerCol;
+}
+
 module.exports = {
   initDb,
   getStatusCollection,
@@ -242,4 +252,5 @@ module.exports = {
   getNFTClassCollection,
   getNFTTokenCollection,
   getNFTDataCollection,
+  getNFTGroupOwnerCollection,
 };

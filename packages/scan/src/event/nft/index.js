@@ -3,6 +3,7 @@ const {
   getNFTClassCollection,
   getNFTTokenCollection,
   getNFTDataCollection,
+  getNFTGroupOwnerCollection,
 } = require("../../mongo");
 const asyncLocalStorage = require("../../asynclocalstorage");
 const { getNFTClass, getToken } = require("./nftStorage");
@@ -73,15 +74,18 @@ async function updateOrCreateNFTTokens(
 
   // Insert into DB
   const session = asyncLocalStorage.getStore();
-  const col = await getNFTTokenCollection();
+
+  // Insert NFT token
+  const newIds = [];
+  const nftTokenCol = await getNFTTokenCollection();
   for (let i = 0; i < quantity; i++) {
-    const result = await col.updateOne(
+    const tokenId = Number(startTokenId) + i;
+    newIds.push(tokenId);
+    const result = await nftTokenCol.updateOne(
       {
         classId: classId,
-        tokenId: Number(startTokenId) + i,
-        minter: from,
+        tokenId: tokenId,
         groupId: groupId,
-        destroyedAt: null,
       },
       {
         $setOnInsert: {
@@ -89,11 +93,43 @@ async function updateOrCreateNFTTokens(
         },
         $set: {
           ...tokenDetails,
+          destroyedAt: null,
+          minter: from,
         },
       },
       { upsert: true, session }
     );
   }
+
+  // Update group ownership
+  const nftGroupOwnerCol = await getNFTGroupOwnerCollection();
+
+  await nftGroupOwnerCol.updateOne(
+    {
+      classId: classId,
+      groupId: groupId,
+    },
+    {
+      $setOnInsert: {
+        createdAt: blockIndexer,
+      },
+      $set: {
+        ...tokenDetails,
+        destroyedAt: null,
+        minter: from,
+        tokenIds: newIds,
+      },
+    },
+    { upsert: true, session }
+  );
+
+  // Update class total issuance
+  const nftClassCol = await getNFTClassCollection();
+  await nftClassCol.updateOne(
+    { classId },
+    { $inc: { totalIssuance: quantity } },
+    { upsert: true, session }
+  );
 }
 
 function isNFTsEvent(section) {
