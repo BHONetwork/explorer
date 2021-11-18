@@ -202,7 +202,7 @@ export default function TimelineItem({ data, asset }) {
     if (assetId.dexShare !== undefined) {
       return assetId.dexShare[0].token.token.id;
     }
-    return assetId.token.token.id;
+    return assetId;
   };
 
   const getTitle = (timelineItem) =>
