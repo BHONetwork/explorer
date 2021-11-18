@@ -60,20 +60,22 @@ async function updateOrCreateNFTTokens(
   tokenDetails.data.attributes = convertedAttr;
   tokenDetails.metadata = hexToString(tokenDetails.metadata);
 
+  // Insert into DB
+  const session = asyncLocalStorage.getStore();
+
   // Query and populate IPFS media data to token attributes
   const mediaCol = await getNFTDataCollection();
-  const mediaData = await mediaCol.findOne({
-    metadata_ipfs: tokenDetails.metadata,
-  });
+  const mediaData = await mediaCol.findOne(
+    {
+      metadata_ipfs: tokenDetails.metadata,
+    },
+    { session }
+  );
   if (mediaData) {
     tokenDetails.data.attributes.media_type = mediaData.file_type;
     tokenDetails.data.attributes.media_uri = mediaData.file_cloud;
   }
-
   console.log("Token details: " + JSON.stringify(tokenDetails));
-
-  // Insert into DB
-  const session = asyncLocalStorage.getStore();
 
   // Insert NFT token
   const newIds = [];
@@ -135,7 +137,7 @@ async function updateOrCreateNFTTokens(
 async function transferNFTToken(blockIndexer, from, to, classId, tokenId) {
   const session = asyncLocalStorage.getStore();
   const tokenCol = await getNFTTokenCollection();
-  const nftToken = await tokenCol.findOne({ tokenId });
+  const nftToken = await tokenCol.findOne({ tokenId }, { session });
 
   await tokenCol.updateOne(
     { tokenId },
@@ -149,10 +151,13 @@ async function transferNFTToken(blockIndexer, from, to, classId, tokenId) {
 
   // Update sender token group
   const groupOwnerCol = await getNFTGroupOwnerCollection();
-  const senderGroup = await groupOwnerCol.findOne({
-    groupId: nftToken.groupId,
-    owner: from,
-  });
+  const senderGroup = await groupOwnerCol.findOne(
+    {
+      groupId: nftToken.groupId,
+      owner: from,
+    },
+    { session }
+  );
   const senderGroupData = Object.assign(senderGroup, {});
   console.log(JSON.stringify(senderGroupData));
   const newSenderIds = senderGroup.tokenIds.filter((item) => item !== tokenId);
@@ -180,10 +185,13 @@ async function transferNFTToken(blockIndexer, from, to, classId, tokenId) {
   }
 
   // Update receiver
-  const receiverGroup = await groupOwnerCol.findOne({
-    groupId: nftToken.groupId,
-    owner: to,
-  });
+  const receiverGroup = await groupOwnerCol.findOne(
+    {
+      groupId: nftToken.groupId,
+      owner: to,
+    },
+    { session }
+  );
 
   if (receiverGroup) {
     console.log(
