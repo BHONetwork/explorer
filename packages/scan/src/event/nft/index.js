@@ -132,6 +132,97 @@ async function updateOrCreateNFTTokens(
   );
 }
 
+async function transferNFTToken(blockIndexer, from, to, classId, tokenId) {
+  const session = asyncLocalStorage.getStore();
+  const tokenCol = await getNFTTokenCollection();
+  const nftToken = await tokenCol.findOne({ tokenId });
+
+  await tokenCol.updateOne(
+    { tokenId },
+    {
+      $set: {
+        owner: to,
+      },
+    },
+    { session }
+  );
+
+  // Update sender token group
+  const groupOwnerCol = await getNFTGroupOwnerCollection();
+  const senderGroup = await groupOwnerCol.findOne({
+    groupId: nftToken.groupId,
+    owner: from,
+  });
+  const senderGroupData = Object.assign(senderGroup, {});
+  console.log(JSON.stringify(senderGroupData));
+  const newSenderIds = senderGroup.tokenIds.filter((item) => item !== tokenId);
+  if (newSenderIds.length > 0) {
+    await groupOwnerCol.updateOne(
+      {
+        groupId: nftToken.groupId,
+        owner: from,
+      },
+      {
+        $set: {
+          tokenIds: newSenderIds,
+        },
+      },
+      { session }
+    );
+  } else {
+    await groupOwnerCol.deleteOne(
+      {
+        groupId: nftToken.groupId,
+        owner: from,
+      },
+      { session }
+    );
+  }
+
+  // Update receiver
+  const receiverGroup = await groupOwnerCol.findOne({
+    groupId: nftToken.groupId,
+    owner: to,
+  });
+
+  if (receiverGroup) {
+    console.log(
+      "Current receiver ids:" + JSON.stringify(receiverGroup.tokenIds)
+    );
+    receiverGroup.tokenIds.push(tokenId);
+    console.log("New receiver ids:" + JSON.stringify(receiverGroup.tokenIds));
+    await groupOwnerCol.updateOne(
+      {
+        groupId: nftToken.groupId,
+        owner: to,
+      },
+      {
+        $set: {
+          tokenIds: receiverGroup.tokenIds,
+        },
+      },
+      { session }
+    );
+  } else {
+    const receiverGroupData = Object.assign(senderGroupData, {});
+    delete receiverGroupData._id;
+    receiverGroupData.owner = to;
+    receiverGroupData.tokenIds = [tokenId];
+    await groupOwnerCol.updateOne(
+      {
+        groupId: nftToken.groupId,
+        owner: to,
+      },
+      {
+        $set: {
+          ...receiverGroupData,
+        },
+      },
+      { upsert: true, session }
+    );
+  }
+}
+
 function isNFTsEvent(section) {
   return section === Modules.NFT;
 }
@@ -156,7 +247,7 @@ async function handleNFTsEvent(
     await updateOrCreateNFTClass(blockIndexer, class_id);
   }
 
-  // Save NFT token
+  // New NFT minted
   if ([NFTEvents.TokenMinted].includes(method)) {
     const [from, to, group_id, class_id, token_id, quantity] = eventData;
     await updateOrCreateNFTTokens(
@@ -168,6 +259,12 @@ async function handleNFTsEvent(
       token_id,
       quantity
     );
+  }
+
+  // NFT transfer
+  if ([NFTEvents.TransferredToken].includes(method)) {
+    const [from, to, class_id, token_id] = eventData;
+    await transferNFTToken(blockIndexer, from, to, class_id, token_id);
   }
   return true;
 }
