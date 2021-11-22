@@ -29,13 +29,13 @@ async function handleEvents(events, blockIndexer, extrinsics) {
         extrinsicHash,
         blockIndexer
       );
-      await handleNFTsEvent(
+      await handleNFTsEvent({
         event,
-        sort,
+        eventSort: sort,
         extrinsicIndex,
         extrinsicHash,
-        blockIndexer
-      );
+        blockIndexer,
+      });
       await handleBalancesEvent(
         event,
         sort,

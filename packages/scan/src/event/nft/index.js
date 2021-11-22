@@ -4,6 +4,7 @@ const {
   getNFTTokenCollection,
   getNFTDataCollection,
   getNFTGroupOwnerCollection,
+  getNftTransferCollection,
 } = require("../../mongo");
 const asyncLocalStorage = require("../../asynclocalstorage");
 const { getNFTClass, getToken } = require("./nftStorage");
@@ -134,7 +135,16 @@ async function updateOrCreateNFTTokens(
   );
 }
 
-async function transferNFTToken(blockIndexer, from, to, classId, tokenId) {
+async function transferNFTToken(
+  blockIndexer,
+  from,
+  to,
+  classId,
+  tokenId,
+  eventSort,
+  extrinsicIndex,
+  extrinsicHash
+) {
   const session = asyncLocalStorage.getStore();
   const tokenCol = await getNFTTokenCollection();
   const nftToken = await tokenCol.findOne({ tokenId }, { session });
@@ -229,19 +239,31 @@ async function transferNFTToken(blockIndexer, from, to, classId, tokenId) {
       { upsert: true, session }
     );
   }
+
+  // Insert new nftTransfer
+  // const nftTransferCol = await getNftTransferCollection();
+  // await nftTransferCol.insertOne({
+  //   indexer: blockIndexer,
+  //   eventSort,
+  //   extrinsicIndex,
+  //   extrinsicHash,
+  //   classId,
+  //   groupId: nftToken.groupId,
+  //   tokenId,
+  //   from,
+  //   to,
+  // }, { session });
 }
 
 function isNFTsEvent(section) {
   return section === Modules.NFT;
 }
 
-async function handleNFTsEvent(
-  event,
-  eventSort,
-  extrinsicIndex,
-  extrinsicHash,
-  blockIndexer
-) {
+async function handleNFTsEvent(eventInput) {
+  const { event, eventSort, extrinsicIndex, extrinsicHash, blockIndexer } =
+    eventInput;
+  console.log("Event input:" + JSON.stringify(eventInput));
+
   const { section, method, data } = event;
 
   if (!isNFTsEvent(section)) {
@@ -272,7 +294,16 @@ async function handleNFTsEvent(
   // NFT transfer
   if ([NFTEvents.TransferredToken].includes(method)) {
     const [from, to, class_id, token_id] = eventData;
-    await transferNFTToken(blockIndexer, from, to, class_id, token_id);
+    await transferNFTToken(
+      blockIndexer,
+      from,
+      to,
+      class_id,
+      token_id,
+      eventSort,
+      extrinsicIndex,
+      extrinsicHash
+    );
   }
   return true;
 }
