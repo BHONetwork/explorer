@@ -241,18 +241,21 @@ async function transferNFTToken(
   }
 
   // Insert new nftTransfer
-  // const nftTransferCol = await getNftTransferCollection();
-  // await nftTransferCol.insertOne({
-  //   indexer: blockIndexer,
-  //   eventSort,
-  //   extrinsicIndex,
-  //   extrinsicHash,
-  //   classId,
-  //   groupId: nftToken.groupId,
-  //   tokenId,
-  //   from,
-  //   to,
-  // }, { session });
+  const nftTransferCol = await getNftTransferCollection();
+  await nftTransferCol.insertOne(
+    {
+      indexer: blockIndexer,
+      eventSort,
+      extrinsicIndex,
+      extrinsicHash,
+      classId,
+      groupId: nftToken.groupId,
+      tokenId,
+      from,
+      to,
+    },
+    { session }
+  );
 }
 
 function isNFTsEvent(section) {
