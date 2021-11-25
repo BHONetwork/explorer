@@ -147,10 +147,10 @@ async function transferNFTToken(
 ) {
   const session = asyncLocalStorage.getStore();
   const tokenCol = await getNFTTokenCollection();
-  const nftToken = await tokenCol.findOne({ tokenId }, { session });
-
+  const nftToken = await tokenCol.findOne({ tokenId, classId }, { session });
+  console.log("NFT token:" + JSON.stringify(nftToken));
   await tokenCol.updateOne(
-    { tokenId },
+    { tokenId, classId },
     {
       $set: {
         owner: to,
@@ -161,6 +161,7 @@ async function transferNFTToken(
 
   // Update sender token group
   const groupOwnerCol = await getNFTGroupOwnerCollection();
+
   const senderGroup = await groupOwnerCol.findOne(
     {
       groupId: nftToken.groupId,
@@ -168,6 +169,8 @@ async function transferNFTToken(
     },
     { session }
   );
+  console.log("NFT sender group:" + JSON.stringify(senderGroup));
+
   const senderGroupData = Object.assign(senderGroup, {});
   console.log(JSON.stringify(senderGroupData));
   const newSenderIds = senderGroup.tokenIds.filter((item) => item !== tokenId);
@@ -265,13 +268,14 @@ function isNFTsEvent(section) {
 async function handleNFTsEvent(eventInput) {
   const { event, eventSort, extrinsicIndex, extrinsicHash, blockIndexer } =
     eventInput;
-  console.log("Event input:" + JSON.stringify(eventInput));
 
   const { section, method, data } = event;
 
   if (!isNFTsEvent(section)) {
     return false;
   }
+  console.log("NFT event input:" + JSON.stringify(eventInput));
+
   const eventData = data.toJSON();
   console.log("NFT event data:" + JSON.stringify(eventData));
   // Save NFT class
@@ -296,6 +300,7 @@ async function handleNFTsEvent(eventInput) {
 
   // NFT transfer
   if ([NFTEvents.TransferredToken].includes(method)) {
+    console.log("NFT transferred:" + JSON.stringify(eventData));
     const [from, to, class_id, token_id] = eventData;
     await transferNFTToken(
       blockIndexer,
