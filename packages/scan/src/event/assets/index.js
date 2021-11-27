@@ -256,7 +256,7 @@ async function handleAssetsEvent(
     newEvents.push({
       section,
       method: AssetsEvents.Issued,
-      data: [parseInt(assetId), owner.toString(), account.free],
+      data: [parseInt(assetId), owner.toString(), toDecimal128(account.free)],
     });
   } else {
     newEvents.push(event);
