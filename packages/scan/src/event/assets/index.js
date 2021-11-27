@@ -139,6 +139,7 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     assetId,
     address
   );
+  console.log("Asset account data:" + JSON.stringify(account));
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
@@ -157,7 +158,11 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     },
     {
       $set: {
-        ...account,
+        free: toDecimal128(account.free),
+        reserved: account.reserved,
+        isFrozen: account.isFrozen,
+        sufficient: account.sufficient,
+        extra: account.extra,
         balance: toDecimal128(account.free),
         dead: account.free === 0 ? true : false,
         lastUpdatedAt: blockIndexer,
@@ -256,7 +261,7 @@ async function handleAssetsEvent(
     newEvents.push({
       section,
       method: AssetsEvents.Issued,
-      data: [parseInt(assetId), owner.toString(), toDecimal128(account.free)],
+      data: [parseInt(assetId), owner.toString(), account.free],
     });
   } else {
     newEvents.push(event);
