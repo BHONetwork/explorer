@@ -159,7 +159,7 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     {
       $set: {
         free: toDecimal128(account.free),
-        reserved: account.reserved,
+        reserved: toDecimal128(account.reserved),
         isFrozen: account.isFrozen,
         sufficient: account.sufficient,
         extra: account.extra,
