@@ -23,6 +23,7 @@ const BalancesEvents = Object.freeze({
 
 const AssetsEvents = Object.freeze({
   // Asset state
+  CreateMinted: "CreateMinted",
   Created: "Created",
   MetadataSet: "MetadataSet",
   MetadataCleared: "MetadataCleared",
