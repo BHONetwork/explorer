@@ -68,6 +68,8 @@ async function updateOrCreateAsset(blockIndexer, assetId) {
       $set: {
         ...asset,
         ...metadata,
+        supply: toDecimal128(asset.supply),
+        minBalance: toDecimal128(asset.minBalance),
         symbol: hexToString(metadata.symbol),
         name: hexToString(metadata.name),
       },
