@@ -45,7 +45,7 @@ async function saveNewAssetTransfer(
       asset: asset._id,
       from: from.toString(),
       to: to.toString(),
-      balance: balance,
+      balance: toDecimal128(balance),
       listIgnore: false,
     },
     { session }
