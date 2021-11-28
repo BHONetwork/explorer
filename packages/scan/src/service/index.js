@@ -65,6 +65,7 @@ async function saveNativeTokenTransfers(blockHeight, session) {
   const col = await getAssetTransferCollection();
   const bulk = col.initializeUnorderedBulkOp();
   for (const transfer of transfers) {
+    transfer.type = "native";
     bulk.insert(transfer);
   }
 

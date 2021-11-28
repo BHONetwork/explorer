@@ -47,6 +47,7 @@ async function saveNewAssetTransfer(
       to: to.toString(),
       balance: toDecimal128(balance),
       listIgnore: false,
+      type: "digital_asset",
     },
     { session }
   );
