@@ -274,7 +274,7 @@ async function handleNFTsEvent(eventInput) {
   if (!isNFTsEvent(section)) {
     return false;
   }
-  console.log("NFT event input:" + JSON.stringify(eventInput));
+  console.log("Handling NFT event:" + JSON.stringify(event));
 
   const eventData = data.toJSON();
   console.log("NFT event data:" + JSON.stringify(eventData));

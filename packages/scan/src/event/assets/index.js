@@ -43,9 +43,9 @@ async function saveNewAssetTransfer(
       extrinsicIndex,
       extrinsicHash,
       asset: asset._id,
-      from,
-      to,
-      balance,
+      from: from.toString(),
+      to: to.toString(),
+      balance: balance,
       listIgnore: false,
     },
     { session }
@@ -142,12 +142,14 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     address
   );
   console.log("Asset account data:" + JSON.stringify(account));
+  console.log("Asset id:" + JSON.stringify(assetId));
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
     { assetId: parseAssetId(assetId), destroyedAt: null },
     { session }
   );
+  console.log("Asset:" + JSON.stringify(asset));
   if (!asset) {
     return;
   }
@@ -156,7 +158,7 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
   const result = await col.updateOne(
     {
       asset: asset._id,
-      address,
+      address: address.toString(),
     },
     {
       $set: {
@@ -172,6 +174,7 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     },
     { upsert: true, session }
   );
+  console.log("Result:" + JSON.stringify(result));
 }
 
 async function updateOrCreateApproval(blockIndexer, assetId, owner, delegate) {
@@ -225,7 +228,6 @@ async function handleAssetsEvent(
   if (!isAssetsEvent(section)) {
     return false;
   }
-  const newData = Object.assign(data, {});
 
   // Special handling for CreateMinted event which is equivalent to multiple events: Created, MetadataSet and Issued
   const newEvents = [];
@@ -318,6 +320,7 @@ async function handleAssetsEvent(
     }
 
     if (method === AssetsEvents.Transferred) {
+      console.log("Handling asset transfer event:" + JSON.stringify(event));
       const [assetId] = eventData;
       await updateOrCreateAsset(blockIndexer, assetId);
     }
@@ -352,7 +355,8 @@ async function handleAssetsEvent(
     }
 
     if (method === AssetsEvents.Transferred) {
-      const [assetId, from, to] = eventData;
+      console.log("Handling asset transfer holders:" + JSON.stringify(event));
+      const [assetId, from, to, amount] = eventData;
       addAddresses(blockIndexer.blockHeight, [from, to]);
       await updateOrCreateAssetHolder(blockIndexer, assetId, from);
       await updateOrCreateAssetHolder(blockIndexer, assetId, to);
