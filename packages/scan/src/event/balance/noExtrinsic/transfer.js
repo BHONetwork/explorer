@@ -2,6 +2,7 @@ const {
   addNativeTransfer,
 } = require("../../../store/blockNativeTokenTransfers");
 const { addAddresses } = require("../../../store/blockAddresses");
+const { toDecimal128 } = require("../../../utils");
 
 async function handleTransfer(event, eventSort, blockIndexer) {
   const eventData = event.data.toJSON();
@@ -12,7 +13,7 @@ async function handleTransfer(event, eventSort, blockIndexer) {
     eventSort,
     from,
     to,
-    balance: value, // FIXME: value should be converted to decimal 128(call toDecimal128)
+    balance: toDecimal128(value),
     listIgnore: true,
   });
 }
