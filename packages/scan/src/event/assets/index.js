@@ -382,7 +382,7 @@ function parseAssetId(assetId) {
   if (assetId.dexShare !== undefined) {
     return assetId.dexShare[0].token.token.id;
   }
-  return assetId;
+  return parseInt(assetId);
 }
 
 module.exports = {
