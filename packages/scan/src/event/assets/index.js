@@ -60,6 +60,7 @@ async function updateOrCreateAsset(blockIndexer, assetId) {
 
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
+
   const result = await col.updateOne(
     { assetId: parseAssetId(assetId), destroyedAt: null },
     {
@@ -67,12 +68,14 @@ async function updateOrCreateAsset(blockIndexer, assetId) {
         createdAt: blockIndexer,
       },
       $set: {
-        ...asset,
         ...metadata,
+        ...asset,
         supply: toDecimal128(asset.supply),
         minBalance: toDecimal128(asset.minBalance),
         symbol: hexToString(metadata.symbol),
         name: hexToString(metadata.name),
+        isFrozen: asset.isFrozen,
+        status: asset.isFrozen ? "frozen" : "active",
       },
     },
     { upsert: true, session }
@@ -125,11 +128,36 @@ async function saveAssetTimeline(
 async function destroyAsset(blockIndexer, assetId) {
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
+  const asset = await col.findOne(
+    { assetId: parseAssetId(assetId) },
+    { session }
+  );
+  if (!asset) {
+    return;
+  }
+
   const result = await col.updateOne(
     { assetId: parseAssetId(assetId) },
     {
       $set: {
         destroyedAt: blockIndexer,
+        status: "destroyed",
+      },
+    },
+    { session }
+  );
+
+  // Update asset Holder status
+  const assetHolderCol = await getAssetHolderCollection();
+  await assetHolderCol.updateOne(
+    {
+      asset: asset._id,
+      address: address.toString(),
+    },
+    {
+      $set: {
+        destroyedAt: blockIndexer,
+        status: "destroyed",
       },
     },
     { session }
@@ -171,6 +199,7 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
         balance: toDecimal128(account.free),
         dead: account.free === 0 ? true : false,
         lastUpdatedAt: blockIndexer,
+        status: account.isFrozen ? "frozen" : "active",
       },
     },
     { upsert: true, session }
