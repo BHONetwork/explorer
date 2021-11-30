@@ -44,7 +44,8 @@ async function updateOrCreateNFTTokens(
   groupId,
   classId,
   startTokenId,
-  quantity
+  quantity,
+  extrinsicHash
 ) {
   // Get token details
   const tokenDetails = await getToken(
@@ -75,7 +76,13 @@ async function updateOrCreateNFTTokens(
   if (mediaData) {
     tokenDetails.data.attributes.media_type = mediaData.file_type;
     tokenDetails.data.attributes.media_uri = mediaData.file_cloud;
+    const baseUrl =
+      process.env.DEPLOY_ENV === "testnet"
+        ? "https://explorer.testnet.bholdus.net/extrinsic/"
+        : "https://explorer.dev.bholdus.net/extrinsic/";
+    tokenDetails.data.attributes.explorer_url = baseUrl + extrinsicHash;
   }
+
   console.log("Token details: " + JSON.stringify(tokenDetails));
 
   // Insert NFT token
@@ -349,7 +356,8 @@ async function handleNFTsEvent(eventInput) {
       group_id,
       class_id,
       token_id,
-      quantity
+      quantity,
+      extrinsicHash
     );
     await updateOrCreateNFTClass(blockIndexer, class_id);
   }
