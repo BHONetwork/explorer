@@ -341,13 +341,7 @@ async function handleNFTsEvent(eventInput) {
   const eventData = data.toJSON();
   console.log("NFT event data:" + JSON.stringify(eventData));
   // Save NFT class
-  if (
-    [
-      NFTEvents.ClassCreated,
-      NFTEvents.TokenMinted,
-      NFTEvents.BurnedToken,
-    ].includes(method)
-  ) {
+  if ([NFTEvents.ClassCreated].includes(method)) {
     const [owner, class_id] = eventData;
     await updateOrCreateNFTClass(blockIndexer, class_id);
   }
