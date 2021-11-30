@@ -97,8 +97,6 @@ async function saveAssetTimeline(
 
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
-  const clonedEventData = Object.assign({}, eventData);
-  clonedEventData[0] = parseAssetId(clonedEventData[0]);
   const result = await col.updateOne(
     { assetId: parseAssetId(assetId), destroyedAt: null },
     {
@@ -152,7 +150,6 @@ async function destroyAsset(blockIndexer, assetId) {
   await assetHolderCol.updateOne(
     {
       asset: asset._id,
-      address: address.toString(),
     },
     {
       $set: {

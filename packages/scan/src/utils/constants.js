@@ -52,6 +52,7 @@ const NFTEvents = Object.freeze({
   ClassCreated: "CreatedClass",
   TokenMinted: "MintedToken",
   TransferredToken: "TransferredToken",
+  BurnedToken: "BurnedToken",
 });
 
 module.exports = {
