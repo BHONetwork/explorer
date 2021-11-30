@@ -42,7 +42,7 @@ const SymbolWrapper = styled.div`
     font-weight: bold;
     font-size: 24px;
     line-height: 24px;
-    color: #111111;
+    color: #ffffff;
   }
   .name {
     font-size: 14px;

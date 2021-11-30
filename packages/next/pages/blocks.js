@@ -55,7 +55,7 @@ export default function Blocks({ node, blocks: ssrBlocks }) {
             <img
               key={`${index}-2`}
               src={`/imgs/icons/${
-                !item?.isFinalized ? "circle-pending" : "check-green"
+                !item?.isFinalized ? "check-success" : "check-pending"
               }.svg`}
               alt=""
             />,

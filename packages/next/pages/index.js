@@ -6,7 +6,8 @@ import Overview from "components/overview";
 import Table from "components/table";
 import MinorText from "components/minorText";
 import InLink from "components/inLink";
-import Symbol from "components/symbol";
+import SymbolOnly from "components/symbolOnly";
+import AssetIcon from "components/assetIcon";
 import AddressEllipsis from "components/addressEllipsis";
 import {
   bigNumber2Locale,
@@ -59,6 +60,14 @@ const FlexWrapper = styled.div`
   align-items: center;
 `;
 
+const AmountText = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: right;
+  color: #fff;
+`;
+
 export default function Home({ node, overview: ssrOverview, price }) {
   const pushedOverview = useSelector(overviewSelector);
   const symbol = getSymbol(node);
@@ -75,7 +84,6 @@ export default function Home({ node, overview: ssrOverview, price }) {
 
   const size = useWindowSize();
   const collapseSize = 900;
-
   const pcViewBlockTableData = useCallback(
     () =>
       (overview?.latestBlocks || []).map((item, index) => [
@@ -105,7 +113,7 @@ export default function Home({ node, overview: ssrOverview, price }) {
         </InLink>,
         <FlexWrapper key={`${index}-2`}>
           <img
-            src="/imgs/icons/check-green.svg"
+            src="/imgs/icons/check-success.svg"
             alt=""
             style={{ marginRight: 8 }}
           />
@@ -170,7 +178,7 @@ export default function Home({ node, overview: ssrOverview, price }) {
         ),
         <FlexWrapper key={`${index}-1`}>
           <img
-            src="/imgs/icons/check-green.svg"
+            src="/imgs/icons/check-success.svg"
             alt=""
             style={{ marginRight: 8 }}
           />
@@ -186,11 +194,13 @@ export default function Home({ node, overview: ssrOverview, price }) {
           address={item.to}
           to={`/account/${item.to}`}
         />,
-        item?.assetSymbol
-          ? `${fromAssetUnit(item.balance, item.assetDecimals)} ${
-              item.assetSymbol
-            }`
-          : `${fromSymbolUnit(item.balance, symbol)} ${symbol}`,
+        <AmountText key={`${index}-3`}>
+          {item?.assetSymbol
+            ? `${fromAssetUnit(item.balance, item.assetDecimals)} ${
+                item.assetSymbol
+              }`
+            : `${fromSymbolUnit(item.balance, symbol)} ${symbol}`}
+        </AmountText>,
       ]),
     [overview?.latestTransfers, symbol]
   );
@@ -223,7 +233,6 @@ export default function Home({ node, overview: ssrOverview, price }) {
     pcViewBlockTableData,
     pcViewTransferTableData,
   ]);
-
   return (
     <Layout node={node}>
       <Wrapper>
@@ -255,7 +264,14 @@ export default function Home({ node, overview: ssrOverview, price }) {
         <Table
           title="Assets"
           head={assetsHead}
+          rowHeight={96}
           body={(overview?.popularAssets || []).map((item, index) => [
+            <AssetIcon
+              key={`${index}-2`}
+              assetId={item.assetId}
+              destroyedAt={item.destroyedAt}
+              size={48}
+            />,
             <InLink
               key={`${index}-1`}
               to={
@@ -263,7 +279,7 @@ export default function Home({ node, overview: ssrOverview, price }) {
                 (item.destroyedAt ? `_${item.createdAt.blockHeight}` : "")
               }
             >{`#${item.assetId}`}</InLink>,
-            <Symbol
+            <SymbolOnly
               key={`${index}-2`}
               symbol={item.symbol}
               assetId={item.assetId}

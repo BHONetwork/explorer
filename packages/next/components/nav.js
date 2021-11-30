@@ -51,7 +51,7 @@ const NoLink = styled.div``;
 export default function Nav({ data, node }) {
   const nodeName = nodes.find((item) => item.value === node)?.name;
   const theme = useTheme();
-
+  console.log("xxxxx");
   return (
     <Wrapper>
       <NavWrapper node={node} themecolor={theme.color}>

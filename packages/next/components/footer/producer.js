@@ -20,16 +20,16 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.p`
-  font-size: 15px;
+  font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.35);
+  color: #bcbcbc;
 `;
 
 export default function Producer() {
   return (
     <Wrapper>
       <Wrapper>
-        <Text>{`© ${new Date().getFullYear()} Unius Pte Ltd. All Rights Reserved`}</Text>
+        <Text>{`© ${new Date().getFullYear()} Bholdus. All Rights Reserved`}</Text>
       </Wrapper>
     </Wrapper>
   );

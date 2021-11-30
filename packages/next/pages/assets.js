@@ -2,7 +2,8 @@ import Layout from "components/layout";
 import Nav from "components/nav";
 import Table from "components/table";
 import InLink from "components/inLink";
-import Symbol from "components/symbol";
+import SymbolOnly from "components/symbol";
+import AssetIcon from "components/assetIcon";
 import AddressEllipsis from "components/addressEllipsis";
 import { assetsHead, EmptyQuery } from "utils/constants";
 import { bigNumber2Locale, fromAssetUnit } from "utils";
@@ -18,6 +19,11 @@ export default function Assets({ node, assets }) {
         <Table
           head={assetsHead}
           body={(assets?.items || []).map((item, index) => [
+            <AssetIcon
+              key={`${index}-2`}
+              assetId={item.assetId}
+              destroyedAt={item.destroyedAt}
+            />,
             <InLink
               key={`${index}-1`}
               to={
@@ -25,11 +31,10 @@ export default function Assets({ node, assets }) {
                 (item.destroyedAt ? `_${item.createdAt.blockHeight}` : "")
               }
             >{`#${item.assetId}`}</InLink>,
-            <Symbol
+            <SymbolOnly
               key={`${index}-2`}
               symbol={item.symbol}
               assetId={item.assetId}
-              destroyedAt={item.destroyedAt}
             />,
             <Name key={`${index}-3`} name={item.name} />,
             <AddressEllipsis

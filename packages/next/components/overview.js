@@ -4,23 +4,42 @@ import { useEffect, useRef, useState } from "react";
 import { card_border } from "styles/textStyles";
 
 const Wrapper = styled.div`
-  background: #ffffff;
-  ${card_border};
-  padding: 39px 64px;
+  background: #113162;
+  border-radius: 12px;
+  padding: 24px 48px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
-  @media screen and (max-width: 900px) {
-    padding: 24px 24px 0;
-    > * {
-      margin-bottom: 24px;
+  flex-direction: row;
+  /* flex-wrap: wrap; */
+  @media screen and (max-width: 640px) {
+    padding: 24px 24px;
+    flex-direction: column;
+    > :first-child {
+      margin-bottom: 26px;
     }
+  }
+`;
+
+const ColumnWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-around;
+  @media screen and (max-width: 640px) {
   }
 `;
 
 const ItemWrapper = styled.div`
   min-width: 130px;
   text-align: center;
+  img {
+    width: 43px;
+    height: 48px;
+    margin-bottom: 16px;
+    @media screen and (max-width: 640px) {
+      margin-bottom: 8px;
+    }
+  }
   @media screen and (max-width: 900px) {
     width: 130px;
   }
@@ -29,7 +48,7 @@ const ItemWrapper = styled.div`
 const Title = styled.p`
   font-size: 14px;
   line-height: 16px;
-  color: rgba(17, 17, 17, 0.35);
+  color: #bcbcbc;
   margin: 0 0 8px;
 `;
 
@@ -37,7 +56,7 @@ const Text = styled.p`
   font-weight: bold;
   font-size: 24px;
   line-height: 24px;
-  color: #111111;
+  color: #ffffff;
   margin: 0;
 `;
 
@@ -64,22 +83,22 @@ const easeOutQuart = (t, b, c, d) => {
 
 export default function Overview({ node, overviewData, price }) {
   const blocksHeightData = overviewData?.latestBlocks[0]?.header.number;
-  const tokenMap = new Map([
-    ["westmint", "WND"],
-    ["statemine", "KSM"],
-    ["polkadot", "DOT"],
-  ]);
+  // const tokenMap = new Map([
+  //   ["westmint", "WND"],
+  //   ["statemine", "KSM"],
+  //   ["polkadot", "DOT"],
+  // ]);
 
-  const colorMap = new Map([
-    ["KSM", "#0f0f0f"],
-    ["WND", "#F22279"],
-  ]);
+  // const colorMap = new Map([
+  //   ["KSM", "#0f0f0f"],
+  //   ["WND", "#F22279"],
+  // ]);
 
-  const token = tokenMap.get(node) ?? "";
+  // const token = tokenMap.get(node) ?? "";
 
-  const color = colorMap.get(token) ?? "#ddd";
+  // const color = colorMap.get(token) ?? "#ddd";
 
-  const chartData = price ?? [];
+  // const chartData = price ?? [];
 
   const [blocksHeightDynamic, setBlocksHeightDynamic] = useState(0);
   const [assetsCountDynamic, setAssetsCountDynamic] = useState(0);
@@ -146,24 +165,32 @@ export default function Overview({ node, overviewData, price }) {
 
   return (
     <Wrapper>
-      <ItemWrapper>
-        <Title>Block Height</Title>
-        <Text>{blocksHeightDynamic?.toLocaleString()}</Text>
-      </ItemWrapper>
-      <ItemWrapper>
-        <Title>Assets</Title>
-        <Text>{assetsCountDynamic?.toLocaleString()}</Text>
-      </ItemWrapper>
-      <ItemWrapper>
-        <Title>Transfers</Title>
-        <Text>{transfersCountDynamic?.toLocaleString()}</Text>
-      </ItemWrapper>
-      <ItemWrapper>
-        <Title>Holders</Title>
-        <Text>{holdersCountDynamic?.toLocaleString()}</Text>
-      </ItemWrapper>
-      <Divider />
-      <div />
+      <ColumnWrapper>
+        <ItemWrapper>
+          <img src="/imgs/icons/overview/blocks.svg" alt="block height" />
+          <Title>Block Height</Title>
+          <Text>{blocksHeightDynamic?.toLocaleString()}</Text>
+        </ItemWrapper>
+        <ItemWrapper>
+          <img src="/imgs/icons/overview/transfers.svg" alt="block height" />
+          <Title>Transfers</Title>
+          <Text>{transfersCountDynamic?.toLocaleString()}</Text>
+        </ItemWrapper>
+      </ColumnWrapper>
+      <ColumnWrapper>
+        <ItemWrapper>
+          <img src="/imgs/icons/overview/assets.svg" alt="block height" />
+          <Title>Assets</Title>
+          <Text>{assetsCountDynamic?.toLocaleString()}</Text>
+        </ItemWrapper>
+        <ItemWrapper>
+          <img src="/imgs/icons/overview/holders.svg" alt="block height" />
+          <Title>Holders</Title>
+          <Text>{holdersCountDynamic?.toLocaleString()}</Text>
+        </ItemWrapper>
+      </ColumnWrapper>
+      {/* <Divider /> */}
+      {/* <div /> */}
       {/* <ChartWrapper>
         <LineChart token={token} data={chartData} color={color} />
       </ChartWrapper> */}

@@ -12,6 +12,29 @@ import SearchS from "components/search/search-s";
 import SubMenu from "./subMenu";
 import { useTheme } from "utils/hooks";
 
+const NavContainer = styled.nav`
+  position: relative;
+  padding: 0 2rem;
+  background-color: #fff;
+  @media screen and (max-width: 1200px) {
+    padding: 0 1.5rem;
+  }
+
+  .logo-s {
+    display: none;
+  }
+
+  @media screen and (max-width: 900px) {
+    .logo-full {
+      display: none;
+    }
+
+    .logo-s {
+      display: initial;
+    }
+  }
+`;
+
 const Container = styled.header`
   position: relative;
   padding: 0 2rem;
@@ -54,6 +77,8 @@ const Wrapper = styled.div`
 const FlexWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const IconWrapper = styled.div`
@@ -159,61 +184,75 @@ export default function Header({ node }) {
   }, [width]);
 
   return (
-    <Container>
-      <Wrapper>
-        <FlexWrapper>
-          <IconWrapper
-            isActive={isActive}
-            onClick={() => setIsActive(!isActive)}
-          >
-            {isActive ? <IconActive /> : <Icon />}
-          </IconWrapper>
-          <Link href={`/`} passHref>
-            <img
-              className="logo-full"
-              src="/imgs/logo_explorer.png"
-              alt="logo"
-              style={{ cursor: "pointer" }}
-            />
-          </Link>
-          <Link href={`/`} passHref>
-            <img
-              className="logo-s"
-              src="/imgs/logo_explorer.png"
-              alt="logo"
-              style={{ cursor: "pointer" }}
-            />
-          </Link>
-          {(isActive || width > 900) && (
-            <MenuWrapper ref={ref}>
-              <Link href={`/`} passHref>
-                <MenuItem
-                  themecolor={theme.color}
-                  onClick={() => setIsActive(false)}
-                  selected={router.pathname === "/"}
-                >
-                  Home
-                </MenuItem>
-              </Link>
-              <SubMenu closeMenu={() => setIsActive(false)} />
-              <Link href={`/assets`} passHref>
-                <MenuItem
-                  themecolor={theme.color}
-                  onClick={() => setIsActive(false)}
-                  selected={router.pathname === "/assets"}
-                >
-                  Assets
-                </MenuItem>
-              </Link>
-            </MenuWrapper>
-          )}
-        </FlexWrapper>
-        <FlexWrapper>
+    <>
+      <NavContainer>
+        <Wrapper>
+          <FlexWrapper>
+            <IconWrapper
+              isActive={isActive}
+              onClick={() => setIsActive(!isActive)}
+            >
+              {isActive ? <IconActive /> : <Icon />}
+            </IconWrapper>
+            <Link href={`/`} passHref>
+              <img
+                className="logo-full"
+                src="/imgs/logo.svg"
+                alt="logo"
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
+            <Link href={`/`} passHref>
+              <img
+                className="logo-s"
+                src="/imgs/logo.svg"
+                alt="logo"
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
+            {(isActive || width > 900) && (
+              <MenuWrapper ref={ref}>
+                <Link href={`/`} passHref>
+                  <MenuItem
+                    themecolor={theme.color}
+                    onClick={() => setIsActive(false)}
+                    selected={router.pathname === "/"}
+                  >
+                    <img
+                      className="nav-icon"
+                      src="/imgs/icons/home.svg"
+                      alt="home"
+                      style={{ cursor: "pointer" }}
+                    />
+                    Home
+                  </MenuItem>
+                </Link>
+                <SubMenu closeMenu={() => setIsActive(false)} />
+                <Link href={`/assets`} passHref>
+                  <MenuItem
+                    themecolor={theme.color}
+                    onClick={() => setIsActive(false)}
+                    selected={router.pathname === "/assets"}
+                  >
+                    <img
+                      className="nav-icon"
+                      src="/imgs/icons/asset.svg"
+                      alt="home"
+                      style={{ cursor: "pointer" }}
+                    />
+                    Assets
+                  </MenuItem>
+                </Link>
+              </MenuWrapper>
+            )}
+          </FlexWrapper>
+          {/* <FlexWrapper>
           <SearchS />
-          {/* <NodeSwitcher node={node} /> */}
-        </FlexWrapper>
-      </Wrapper>
-      {isHomePage && <Subheader node={node} />}
-    </Container>
+          <NodeSwitcher node={node} />
+        </FlexWrapper> */}
+        </Wrapper>
+      </NavContainer>
+      <Container>{isHomePage && <Subheader node={node} />}</Container>
+    </>
   );
 }

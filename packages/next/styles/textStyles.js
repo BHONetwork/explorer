@@ -17,6 +17,14 @@ export const p_18_bold = css`
   line-height: 20px;
 `;
 
+export const p_20_normal = css`
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+`;
+
 export const text_dark_major = css`
   color: #111111;
 `;
@@ -26,10 +34,5 @@ export const text_dark_minor = css`
 `;
 
 export const card_border = css`
-  border: 1px solid rgb(244, 244, 244);
-  box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.04),
-    0px 1.80882px 5.94747px rgba(0, 0, 0, 0.0260636),
-    0px 0.751293px 0.932578px rgba(0, 0, 0, 0.02),
-    0px 0.271728px 0px rgba(0, 0, 0, 0.0139364);
-  border-radius: 8px;
+  border-radius: 12px;
 `;

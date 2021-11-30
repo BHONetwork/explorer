@@ -7,25 +7,19 @@ const Wrapper = styled.div`
   left: 0;
   width: 100%;
   height: 320px;
-  background: #ffffff;
+  background: #161e32;
 `;
 
 const Masked = styled.div`
+  margin-top: 64px;
   width: 100%;
   height: 100%;
   opacity: 0.8;
   position: relative;
-  top: -8px;
-  background: radial-gradient(
-    87.94% 100% at 50% 100%,
-    #f1f1f1 0%,
-    #fafafa 64.58%,
-    #ffffff 100%
-  );
-  -webkit-mask-image: url("/imgs/pattern-dot.svg");
-  mask-image: url("/imgs/pattern-dot.svg");
-  -webkit-mask-repeat: repeat;
-  mask-repeat: repeat;
+  background-image: url("/imgs/background.png");
+  background-repeat: no-repeat;
+  background-color: #161e32;
+  background-size: contain;
 `;
 
 export default function Background() {

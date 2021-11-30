@@ -11,8 +11,14 @@ import { nodes } from "utils/constants";
 import { isNoIdentity } from "utils";
 
 const StyledLink = styled.div`
-  color: ${(p) => p.themecolor};
+  color: #00deff;
+  font-weight: 500;
+  line-height: 17px;
+  font-size: 14px;
   cursor: default;
+  :hover {
+    text-decoration: underline;
+  }
   ${(p) =>
     p.cursor === "true" &&
     css`

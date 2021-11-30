@@ -43,7 +43,7 @@ const Display = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 14px;
-  color: #111111;
+  color: #ffffff;
 `;
 
 export default function IdentityLink({ identity, cursor, width }) {

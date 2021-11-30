@@ -9,61 +9,45 @@ import SearchHints from "./searchHints";
 
 const ExploreWrapper = styled.div`
   position: relative;
+  width: 100%;
+  height: 64px;
+  max-width: 650px;
   display: flex;
+  flex-direction: row;
   align-items: center;
-
-  > :not(:first-child) {
-    margin-left: 16px;
-  }
-
-  @media screen and (max-width: 900px) {
-    flex-direction: column;
-    width: 100%;
-    > * {
-      width: 100% !important;
-    }
-
-    > :not(:first-child) {
-      margin: 16px 0 0;
-    }
-  }
+  background: #ffffff;
+  box-shadow: 0px 2px 24px rgba(23, 22, 79, 0.1);
+  border-radius: 12px;
+  padding: 12px;
 `;
 
 const ExploreInput = styled.input`
   width: 100%;
-  padding: 12px 16px;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-  border-radius: 8px;
+  border: none;
   font-size: 15px;
   line-height: 18px;
   outline: none;
-
   ::placeholder {
     color: rgba(17, 17, 17, 0.35);
-  }
-
-  :active,
-  :focus {
-    border: 1px solid #bbbbbb;
   }
 `;
 
 const ExploreButton = styled.div`
-  background: ${(p) => p.themecolor};
-  border-radius: 8px;
-  padding: 12px 16px;
+  background: linear-gradient(360deg, #3186fd 2.73%, #3065fe 100%);
+  width: 130px;
+  height: 40px;
+  border-radius: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 17px;
   color: #ffffff;
   text-align: center;
   cursor: pointer;
-  ${(p) =>
-    p.node === "kusama" &&
-    css`
-      background: #000000;
-    `}
+  text-transform: uppercase;
+  margin-left: 12px;
 `;
 
 const SearchWrapper = styled.div`
@@ -170,22 +154,20 @@ export default function SearchL({ node }) {
 
   return (
     <ExploreWrapper>
-      <SearchWrapper>
-        <ExploreInput
-          onKeyDown={onKeyDown}
-          value={searchKeyword}
-          onChange={onInput}
-          placeholder="Block / Address / Extrinsic / Asset /..."
-          onFocus={() => setFocus(true)}
-          onBlur={() => setTimeout(() => setFocus(false), 200)}
-        />
-        <SearchHints
-          hints={hintMap.get(searchKeyword)}
-          focus={focus}
-          selected={selected}
-          toPage={toPage}
-        />
-      </SearchWrapper>
+      <ExploreInput
+        onKeyDown={onKeyDown}
+        value={searchKeyword}
+        onChange={onInput}
+        placeholder="Block / Address / Extrinsic / Asset /..."
+        onFocus={() => setFocus(true)}
+        onBlur={() => setTimeout(() => setFocus(false), 200)}
+      />
+      <SearchHints
+        hints={hintMap.get(searchKeyword)}
+        focus={focus}
+        selected={selected}
+        toPage={toPage}
+      />
       <ExploreButton
         node={node}
         onClick={onSearch}
