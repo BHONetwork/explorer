@@ -3,6 +3,7 @@ const { isBalancesEvent } = require("./utils");
 const { addNativeTransfer } = require("../../store/blockNativeTokenTransfers");
 const { addAddresses } = require("../../store/blockAddresses");
 const { addAddress } = require("../../store/blockAddresses");
+const { toDecimal128 } = require("../../utils");
 
 async function handleBalancesEvent(
   event,
@@ -20,6 +21,8 @@ async function handleBalancesEvent(
   const eventData = data.toJSON();
 
   if ([BalancesEvents.Transfer].includes(method)) {
+    console.log("Handling transfer event:" + JSON.stringify(event));
+
     const [from, to, value] = eventData;
     addAddresses(blockIndexer.blockHeight, [from, to]);
     addNativeTransfer(blockIndexer.blockHeight, {
@@ -29,7 +32,7 @@ async function handleBalancesEvent(
       extrinsicHash,
       from,
       to,
-      balance: value, // FIXME: value should be converted to decimal 128(call toDecimal128)
+      balance: toDecimal128(value),
       listIgnore: false,
     });
   }

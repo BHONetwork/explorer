@@ -43,10 +43,11 @@ async function saveNewAssetTransfer(
       extrinsicIndex,
       extrinsicHash,
       asset: asset._id,
-      from,
-      to,
-      balance,
+      from: from.toString(),
+      to: to.toString(),
+      balance: toDecimal128(balance),
       listIgnore: false,
+      type: "digital_asset",
     },
     { session }
   );
@@ -56,10 +57,10 @@ async function updateOrCreateAsset(blockIndexer, assetId) {
   console.log("updateOrCreateAsset:" + JSON.stringify(assetId));
   const asset = await getAssetsAsset(blockIndexer.blockHash, assetId);
   const metadata = await getAssetsMetadata(blockIndexer.blockHash, assetId);
-  console.log("Asset: " + JSON.stringify(asset));
 
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
+
   const result = await col.updateOne(
     { assetId: parseAssetId(assetId), destroyedAt: null },
     {
@@ -67,10 +68,14 @@ async function updateOrCreateAsset(blockIndexer, assetId) {
         createdAt: blockIndexer,
       },
       $set: {
-        ...asset,
         ...metadata,
+        ...asset,
+        supply: toDecimal128(asset.supply),
+        minBalance: toDecimal128(asset.minBalance),
         symbol: hexToString(metadata.symbol),
         name: hexToString(metadata.name),
+        isFrozen: asset.isFrozen,
+        status: asset.isFrozen ? "frozen" : "active",
       },
     },
     { upsert: true, session }
@@ -92,8 +97,6 @@ async function saveAssetTimeline(
 
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
-  const clonedEventData = Object.assign({}, eventData);
-  clonedEventData[0] = parseAssetId(clonedEventData[0]);
   const result = await col.updateOne(
     { assetId: parseAssetId(assetId), destroyedAt: null },
     {
@@ -123,11 +126,35 @@ async function saveAssetTimeline(
 async function destroyAsset(blockIndexer, assetId) {
   const session = asyncLocalStorage.getStore();
   const col = await getAssetCollection();
+  const asset = await col.findOne(
+    { assetId: parseAssetId(assetId) },
+    { session }
+  );
+  if (!asset) {
+    return;
+  }
+
   const result = await col.updateOne(
     { assetId: parseAssetId(assetId) },
     {
       $set: {
         destroyedAt: blockIndexer,
+        status: "destroyed",
+      },
+    },
+    { session }
+  );
+
+  // Update asset Holder status
+  const assetHolderCol = await getAssetHolderCollection();
+  await assetHolderCol.updateOne(
+    {
+      asset: asset._id,
+    },
+    {
+      $set: {
+        destroyedAt: blockIndexer,
+        status: "destroyed",
       },
     },
     { session }
@@ -140,12 +167,15 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
     assetId,
     address
   );
+  console.log("Asset account data:" + JSON.stringify(account));
+  console.log("Asset id:" + JSON.stringify(assetId));
   const session = asyncLocalStorage.getStore();
   const assetCol = await getAssetCollection();
   const asset = await assetCol.findOne(
     { assetId: parseAssetId(assetId), destroyedAt: null },
     { session }
   );
+  console.log("Asset:" + JSON.stringify(asset));
   if (!asset) {
     return;
   }
@@ -154,18 +184,24 @@ async function updateOrCreateAssetHolder(blockIndexer, assetId, address) {
   const result = await col.updateOne(
     {
       asset: asset._id,
-      address,
+      address: address.toString(),
     },
     {
       $set: {
-        ...account,
+        free: toDecimal128(account.free),
+        reserved: toDecimal128(account.reserved),
+        isFrozen: account.isFrozen,
+        sufficient: account.sufficient,
+        extra: account.extra,
         balance: toDecimal128(account.free),
         dead: account.free === 0 ? true : false,
         lastUpdatedAt: blockIndexer,
+        status: account.isFrozen ? "frozen" : "active",
       },
     },
     { upsert: true, session }
   );
+  console.log("Result:" + JSON.stringify(result));
 }
 
 async function updateOrCreateApproval(blockIndexer, assetId, owner, delegate) {
@@ -219,102 +255,150 @@ async function handleAssetsEvent(
   if (!isAssetsEvent(section)) {
     return false;
   }
-  const eventData = data.toJSON();
 
-  // Save assets
-  if (
-    [
-      AssetsEvents.Created,
-      AssetsEvents.ForceCreated,
-      AssetsEvents.MetadataSet,
-      AssetsEvents.Issued,
-      AssetsEvents.Burned,
-      AssetsEvents.AssetStatusChanged,
-      AssetsEvents.TeamChanged,
-      AssetsEvents.OwnerChanged,
-      AssetsEvents.AssetFrozen,
-      AssetsEvents.AssetThawed,
-    ].includes(method)
-  ) {
-    const [assetId] = eventData;
-    await updateOrCreateAsset(blockIndexer, assetId);
-    await saveAssetTimeline(
-      blockIndexer,
-      assetId,
+  // Special handling for CreateMinted event which is equivalent to multiple events: Created, MetadataSet and Issued
+  const newEvents = [];
+
+  // Regenerate events if it is CreateMinted, otherwise use original event
+  if ([AssetsEvents.CreateMinted].includes(method)) {
+    const [assetId, admin, owner] = data;
+    // Push Created event
+    newEvents.push({
       section,
-      method,
-      eventData,
-      eventSort,
-      extrinsicIndex,
-      extrinsicHash
-    );
-  }
+      method: AssetsEvents.Created,
+      data: [parseInt(assetId), admin.toString(), owner.toString()],
+    });
 
-  if (method === AssetsEvents.Destroyed) {
-    const [assetId] = eventData;
-    await saveAssetTimeline(
-      blockIndexer,
-      assetId,
+    // Push MetadataSet event
+    const metadata = await getAssetsMetadata(blockIndexer.blockHash, assetId);
+    newEvents.push({
       section,
-      method,
-      eventData,
-      eventSort,
-      extrinsicIndex,
-      extrinsicHash
-    );
-    await destroyAsset(blockIndexer, assetId);
-  }
+      method: AssetsEvents.MetadataSet,
+      data: [
+        parseInt(assetId),
+        metadata.name,
+        metadata.symbol,
+        metadata.decimals,
+        metadata.isFrozen,
+      ],
+    });
 
-  if (method === AssetsEvents.Transferred) {
-    const [assetId] = eventData;
-    await updateOrCreateAsset(blockIndexer, assetId);
-  }
-
-  // Save transfers
-  if (method === AssetsEvents.Transferred) {
-    const [assetId, from, to, balance] = eventData;
-    await saveNewAssetTransfer(
-      blockIndexer,
-      eventSort,
-      extrinsicIndex,
-      extrinsicHash,
+    // Push Minted event
+    const account = await getAssetsAccount(
+      blockIndexer.blockHash,
       assetId,
-      from,
-      to,
-      balance
+      owner
     );
+    newEvents.push({
+      section,
+      method: AssetsEvents.Issued,
+      data: [parseInt(assetId), owner.toString(), account.free],
+    });
+  } else {
+    newEvents.push(event);
   }
 
-  // Save asset holders
-  if (
-    [
-      AssetsEvents.Issued,
-      AssetsEvents.Burned,
-      AssetsEvents.Frozen,
-      AssetsEvents.Thawed,
-    ].includes(method)
-  ) {
-    const [assetId, accountId] = eventData;
-    addAddress(blockIndexer.blockHeight, accountId);
-    await updateOrCreateAssetHolder(blockIndexer, assetId, accountId);
-  }
+  // Loop through events and handle one by one
+  for (const event of newEvents) {
+    const { section, method, data } = event;
+    const eventData = data;
+    // Save assets
+    if (
+      [
+        AssetsEvents.Created,
+        AssetsEvents.ForceCreated,
+        AssetsEvents.MetadataSet,
+        AssetsEvents.Issued,
+        AssetsEvents.Burned,
+        AssetsEvents.AssetStatusChanged,
+        AssetsEvents.TeamChanged,
+        AssetsEvents.OwnerChanged,
+        AssetsEvents.AssetFrozen,
+        AssetsEvents.AssetThawed,
+      ].includes(method)
+    ) {
+      const [assetId] = eventData;
+      await updateOrCreateAsset(blockIndexer, assetId);
+      await saveAssetTimeline(
+        blockIndexer,
+        assetId,
+        section,
+        method,
+        eventData,
+        eventSort,
+        extrinsicIndex,
+        extrinsicHash
+      );
+    }
 
-  if (method === AssetsEvents.Transferred) {
-    const [assetId, from, to] = eventData;
-    addAddresses(blockIndexer.blockHeight, [from, to]);
-    await updateOrCreateAssetHolder(blockIndexer, assetId, from);
-    await updateOrCreateAssetHolder(blockIndexer, assetId, to);
-  }
+    if (method === AssetsEvents.Destroyed) {
+      const [assetId] = eventData;
+      await saveAssetTimeline(
+        blockIndexer,
+        assetId,
+        section,
+        method,
+        eventData,
+        eventSort,
+        extrinsicIndex,
+        extrinsicHash
+      );
+      await destroyAsset(blockIndexer, assetId);
+    }
 
-  if (
-    [
-      AssetsEvents.ApprovedTransfer,
-      AssetsEvents.ApprovalCancelled,
-      AssetsEvents.TransferredApproved,
-    ].includes(method)
-  ) {
-    const [assetId, owner, delegate] = eventData;
-    await updateOrCreateApproval(blockIndexer, assetId, owner, delegate);
+    if (method === AssetsEvents.Transferred) {
+      console.log("Handling asset transfer event:" + JSON.stringify(event));
+      const [assetId] = eventData;
+      await updateOrCreateAsset(blockIndexer, assetId);
+    }
+
+    // Save transfers
+    if (method === AssetsEvents.Transferred) {
+      const [assetId, from, to, balance] = eventData;
+      await saveNewAssetTransfer(
+        blockIndexer,
+        eventSort,
+        extrinsicIndex,
+        extrinsicHash,
+        assetId,
+        from,
+        to,
+        balance
+      );
+    }
+
+    // Save asset holders
+    if (
+      [
+        AssetsEvents.Issued,
+        AssetsEvents.Burned,
+        AssetsEvents.Frozen,
+        AssetsEvents.Thawed,
+      ].includes(method)
+    ) {
+      const [assetId, accountId] = eventData;
+      addAddress(blockIndexer.blockHeight, accountId);
+      await updateOrCreateAssetHolder(blockIndexer, assetId, accountId);
+    }
+
+    if (method === AssetsEvents.Transferred) {
+      console.log("Handling asset transfer holders:" + JSON.stringify(event));
+      const [assetId, from, to, amount] = eventData;
+      addAddresses(blockIndexer.blockHeight, [from, to]);
+      await updateOrCreateAssetHolder(blockIndexer, assetId, from);
+      await updateOrCreateAssetHolder(blockIndexer, assetId, to);
+    }
+
+    if (
+      [
+        AssetsEvents.ApprovedTransfer,
+        AssetsEvents.ApprovalCancelled,
+        AssetsEvents.TransferredApproved,
+      ].includes(method)
+    ) {
+      const [assetId, owner, delegate] = eventData;
+      await updateOrCreateApproval(blockIndexer, assetId, owner, delegate);
+    }
   }
 
   return true;
@@ -324,7 +408,7 @@ function parseAssetId(assetId) {
   if (assetId.dexShare !== undefined) {
     return assetId.dexShare[0].token.token.id;
   }
-  return assetId;
+  return parseInt(assetId);
 }
 
 module.exports = {

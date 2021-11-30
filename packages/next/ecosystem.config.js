@@ -18,7 +18,7 @@ module.exports = {
       },
     },
     {
-      name: "statescan-next-staging",
+      name: "statescan-next-prod",
       script: "yarn",
       interpreter: "bash",
       args: "start",

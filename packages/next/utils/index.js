@@ -118,7 +118,13 @@ export function getPrecision(symbol) {
 
 export function fromSymbolUnit(value, symbol) {
   const precision = getPrecision(symbol);
-  return new BigNumber(value).dividedBy(Math.pow(10, precision)).toString();
+  if (value.hasOwnProperty("$numberDecimal")) {
+    return new BigNumber(value["$numberDecimal"])
+      .dividedBy(Math.pow(10, precision))
+      .toString();
+  } else {
+    return new BigNumber(value).dividedBy(Math.pow(10, precision)).toString();
+  }
 }
 
 export function toSymbolUnit(value, symbol) {
@@ -127,7 +133,13 @@ export function toSymbolUnit(value, symbol) {
 }
 
 export function fromAssetUnit(value, decimals) {
-  return new BigNumber(value).dividedBy(Math.pow(10, decimals)).toString();
+  if (value.hasOwnProperty("$numberDecimal")) {
+    return new BigNumber(value["$numberDecimal"])
+      .dividedBy(Math.pow(10, decimals))
+      .toString();
+  } else {
+    return new BigNumber(value).dividedBy(Math.pow(10, decimals)).toString();
+  }
 }
 
 export function bigNumber2Locale(x) {

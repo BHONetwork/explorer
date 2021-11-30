@@ -10,7 +10,7 @@ const asyncLocalStorage = require("../../asynclocalstorage");
 const { getNFTClass, getToken } = require("./nftStorage");
 const { Modules, NFTEvents } = require("../../utils/constants");
 
-async function updateOrCreateNFTClass(blockIndexer, classId) {
+async function updateOrCreateNFTClass(blockIndexer, classId, extrinsicHash) {
   const nftClass = await getNFTClass(blockIndexer.blockHash, classId);
 
   // Convert class attributes from hex to string
@@ -18,7 +18,16 @@ async function updateOrCreateNFTClass(blockIndexer, classId) {
   for (const [key, value] of Object.entries(nftClass.data.attributes)) {
     convertedAttr[hexToString(key)] = hexToString(value);
   }
+
+  const baseUrl =
+    process.env.DEPLOY_ENV === "testnet"
+      ? "https://explorer.testnet.bholdus.net/extrinsic/"
+      : "https://explorer.dev.bholdus.net/extrinsic/";
+  const explorerUrl = baseUrl + extrinsicHash;
+
   nftClass.data.attributes = convertedAttr;
+  nftClass.data.attributes.explorer_url = explorerUrl;
+
   console.log("NFT class: " + JSON.stringify(nftClass));
 
   const session = asyncLocalStorage.getStore();
@@ -44,7 +53,8 @@ async function updateOrCreateNFTTokens(
   groupId,
   classId,
   startTokenId,
-  quantity
+  quantity,
+  extrinsicHash
 ) {
   // Get token details
   const tokenDetails = await getToken(
@@ -72,10 +82,17 @@ async function updateOrCreateNFTTokens(
     },
     { session }
   );
+  const baseUrl =
+    process.env.DEPLOY_ENV === "testnet"
+      ? "https://explorer.testnet.bholdus.net/extrinsic/"
+      : "https://explorer.dev.bholdus.net/extrinsic/";
+  const explorerUrl = baseUrl + extrinsicHash;
   if (mediaData) {
     tokenDetails.data.attributes.media_type = mediaData.file_type;
     tokenDetails.data.attributes.media_uri = mediaData.file_cloud;
+    tokenDetails.data.attributes.explorer_url = explorerUrl;
   }
+
   console.log("Token details: " + JSON.stringify(tokenDetails));
 
   // Insert NFT token
@@ -123,14 +140,6 @@ async function updateOrCreateNFTTokens(
         tokenIds: newIds,
       },
     },
-    { upsert: true, session }
-  );
-
-  // Update class total issuance
-  const nftClassCol = await getNFTClassCollection();
-  await nftClassCol.updateOne(
-    { classId },
-    { $inc: { totalIssuance: quantity } },
     { upsert: true, session }
   );
 }
@@ -261,6 +270,69 @@ async function transferNFTToken(
   );
 }
 
+async function burnNFTToken(
+  blockIndexer,
+  owner,
+  classId,
+  tokenId,
+  eventSort,
+  extrinsicIndex,
+  extrinsicHash
+) {
+  const session = asyncLocalStorage.getStore();
+  const tokenCol = await getNFTTokenCollection();
+  const nftToken = await tokenCol.findOne({ tokenId, classId }, { session });
+  console.log("NFT token:" + JSON.stringify(nftToken));
+  // Update token status
+  await tokenCol.updateOne(
+    { tokenId, classId },
+    {
+      $set: {
+        destroyedAt: blockIndexer,
+        status: "destroyed",
+      },
+    },
+    { session }
+  );
+
+  // Update sender token group
+  const groupOwnerCol = await getNFTGroupOwnerCollection();
+
+  const senderGroup = await groupOwnerCol.findOne(
+    {
+      groupId: nftToken.groupId,
+      owner: owner,
+    },
+    { session }
+  );
+  console.log("NFT owner group:" + JSON.stringify(senderGroup));
+
+  const senderGroupData = Object.assign(senderGroup, {});
+  const newSenderIds = senderGroup.tokenIds.filter((item) => item !== tokenId);
+  if (newSenderIds.length > 0) {
+    await groupOwnerCol.updateOne(
+      {
+        groupId: nftToken.groupId,
+        owner: owner,
+      },
+      {
+        $set: {
+          tokenIds: newSenderIds,
+        },
+      },
+      { session }
+    );
+  } else {
+    await groupOwnerCol.deleteOne(
+      {
+        groupId: nftToken.groupId,
+        owner: owner,
+      },
+      { session }
+    );
+  }
+}
+
 function isNFTsEvent(section) {
   return section === Modules.NFT;
 }
@@ -274,14 +346,14 @@ async function handleNFTsEvent(eventInput) {
   if (!isNFTsEvent(section)) {
     return false;
   }
-  console.log("NFT event input:" + JSON.stringify(eventInput));
+  console.log("Handling NFT event:" + JSON.stringify(event));
 
   const eventData = data.toJSON();
   console.log("NFT event data:" + JSON.stringify(eventData));
   // Save NFT class
   if ([NFTEvents.ClassCreated].includes(method)) {
     const [owner, class_id] = eventData;
-    await updateOrCreateNFTClass(blockIndexer, class_id);
+    await updateOrCreateNFTClass(blockIndexer, class_id, extrinsicHash);
   }
 
   // New NFT minted
@@ -294,8 +366,10 @@ async function handleNFTsEvent(eventInput) {
       group_id,
       class_id,
       token_id,
-      quantity
+      quantity,
+      extrinsicHash
     );
+    await updateOrCreateNFTClass(blockIndexer, class_id, extrinsicHash);
   }
 
   // NFT transfer
@@ -312,6 +386,22 @@ async function handleNFTsEvent(eventInput) {
       extrinsicIndex,
       extrinsicHash
     );
+  }
+
+  // NFT burned
+  if ([NFTEvents.BurnedToken].includes(method)) {
+    console.log("NFT burned:" + JSON.stringify(eventData));
+    const [owner, class_id, token_id] = eventData;
+    await burnNFTToken(
+      blockIndexer,
+      owner,
+      class_id,
+      token_id,
+      eventSort,
+      extrinsicIndex,
+      extrinsicHash
+    );
+    await updateOrCreateNFTClass(blockIndexer, class_id, extrinsicHash);
   }
   return true;
 }

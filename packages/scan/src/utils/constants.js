@@ -23,6 +23,7 @@ const BalancesEvents = Object.freeze({
 
 const AssetsEvents = Object.freeze({
   // Asset state
+  CreateMinted: "CreateMinted",
   Created: "Created",
   MetadataSet: "MetadataSet",
   MetadataCleared: "MetadataCleared",
@@ -51,6 +52,7 @@ const NFTEvents = Object.freeze({
   ClassCreated: "CreatedClass",
   TokenMinted: "MintedToken",
   TransferredToken: "TransferredToken",
+  BurnedToken: "BurnedToken",
 });
 
 module.exports = {
