@@ -125,14 +125,6 @@ async function updateOrCreateNFTTokens(
     },
     { upsert: true, session }
   );
-
-  // Update class total issuance
-  const nftClassCol = await getNFTClassCollection();
-  await nftClassCol.updateOne(
-    { classId },
-    { $inc: { totalIssuance: quantity } },
-    { upsert: true, session }
-  );
 }
 
 async function transferNFTToken(
@@ -274,6 +266,7 @@ async function burnNFTToken(
   const tokenCol = await getNFTTokenCollection();
   const nftToken = await tokenCol.findOne({ tokenId, classId }, { session });
   console.log("NFT token:" + JSON.stringify(nftToken));
+  // Update token status
   await tokenCol.updateOne(
     { tokenId, classId },
     {
@@ -358,6 +351,7 @@ async function handleNFTsEvent(eventInput) {
       token_id,
       quantity
     );
+    await updateOrCreateNFTClass(blockIndexer, class_id);
   }
 
   // NFT transfer
@@ -389,6 +383,7 @@ async function handleNFTsEvent(eventInput) {
       extrinsicIndex,
       extrinsicHash
     );
+    await updateOrCreateNFTClass(blockIndexer, class_id);
   }
   return true;
 }
