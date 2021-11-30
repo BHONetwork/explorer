@@ -19,7 +19,7 @@ export const nodes = [
     name: "Cygnus",
     sub: "Bholdus",
     value: "testnet",
-    symbol: "BHO",
+    symbol: "BHOT",
     icon: "/imgs/icons/logo-bholdus.png",
     color: "#fff",
     colorSecondary: "#808191",
