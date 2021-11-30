@@ -19,6 +19,7 @@ const Title = styled.div`
 
 const JsonDisplayWrapper = styled.div`
   padding: 8px 24px;
+  color: #161e32;
 `;
 
 export default function JsonAttributes({ title, data, type }) {

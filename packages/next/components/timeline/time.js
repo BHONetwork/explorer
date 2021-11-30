@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   }
 
   > div:nth-child(3) {
-    color: rgba(17, 17, 17, 0.35);
+    color: #fff;
   }
 
   > div {

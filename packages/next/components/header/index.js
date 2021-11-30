@@ -3,7 +3,12 @@ import styled, { css } from "styled-components";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import { useOnClickOutside, useWindowSize, useHomePage } from "utils/hooks";
+import {
+  useOnClickOutside,
+  useWindowSize,
+  useHomePage,
+  usePage,
+} from "utils/hooks";
 import Icon from "./icon.svg";
 import IconActive from "./icon-active.svg";
 import NodeSwitcher from "components/nodeSwitcher";
@@ -11,7 +16,8 @@ import Subheader from "./subheader";
 import SearchS from "components/search/search-s";
 import SubMenu from "./subMenu";
 import { useTheme } from "utils/hooks";
-
+import HomeIcon from "./home.svg";
+import AssetIcon from "./asset.svg";
 const NavContainer = styled.nav`
   position: relative;
   padding: 0 2rem;
@@ -95,7 +101,7 @@ const IconWrapper = styled.div`
   border: 1px solid #eeeeee;
 
   > svg {
-    stroke: rgba(17, 17, 17, 0.65);
+    stroke: rgba(0, 0, 0, 0.65);
   }
 
   :hover {
@@ -139,10 +145,15 @@ const MenuItem = styled.div`
   line-height: 24px;
   cursor: pointer;
   text-decoration: none;
-  color: #111111;
-
-  :hover {
-    color: ${(p) => p.themecolor};
+  color: #808191;
+  display: flex;
+  justify-content: center;
+  padding: 11px 24px;
+  svg {
+    margin-right: 12px;
+    > * {
+      fill: #808191;
+    }
   }
 
   :not(:first-child) {
@@ -152,8 +163,9 @@ const MenuItem = styled.div`
   @media screen and (max-width: 900px) {
     padding: 6px 12px;
     :hover {
-      color: inherit;
-      background: #fafafa;
+      color: rgba(0, 0, 0, 0.8);
+      /* color: inherit; */
+      /* background: #fafafa; */
     }
 
     :not(:first-child) {
@@ -163,14 +175,40 @@ const MenuItem = styled.div`
     ${(p) =>
       p.selected &&
       css`
-        background: #fafafa;
+        background: #000;
+      `}
+  }
+
+  ${(p) =>
+    p.active &&
+    css`
+      border-radius: 8px;
+      background: linear-gradient(360deg, #3186fd 2.73%, #3065fe 100%);
+      padding: 11px 24px;
+      color: #ffffff;
+      svg {
+        > * {
+          fill: #ffffff;
+        }
+      }
+    `}
+  @media screen and (max-width: 900px) {
+    justify-content: flex-start;
+    svg {
+      display: none;
+    }
+    ${(p) =>
+      p.active &&
+      css`
+        border-radius: 0;
       `}
   }
 `;
 
 export default function Header({ node }) {
   const router = useRouter();
-  const isHomePage = useHomePage();
+  // const isHomePage = useHomePage();
+  const isPage = usePage();
   const [isActive, setIsActive] = useState(false);
   const { width } = useWindowSize();
   const ref = useRef();
@@ -182,7 +220,7 @@ export default function Header({ node }) {
       setIsActive(false);
     }
   }, [width]);
-
+  console.log(router.pathname === "/assets");
   return (
     <>
       <NavContainer>
@@ -216,14 +254,9 @@ export default function Header({ node }) {
                   <MenuItem
                     themecolor={theme.color}
                     onClick={() => setIsActive(false)}
-                    selected={router.pathname === "/"}
+                    active={router.pathname === "/"}
                   >
-                    <img
-                      className="nav-icon"
-                      src="/imgs/icons/home.svg"
-                      alt="home"
-                      style={{ cursor: "pointer" }}
-                    />
+                    <HomeIcon className="nav-icon" />
                     Home
                   </MenuItem>
                 </Link>
@@ -232,14 +265,9 @@ export default function Header({ node }) {
                   <MenuItem
                     themecolor={theme.color}
                     onClick={() => setIsActive(false)}
-                    selected={router.pathname === "/assets"}
+                    active={router.pathname === "/assets"}
                   >
-                    <img
-                      className="nav-icon"
-                      src="/imgs/icons/asset.svg"
-                      alt="home"
-                      style={{ cursor: "pointer" }}
-                    />
+                    <AssetIcon />
                     Assets
                   </MenuItem>
                 </Link>
@@ -252,7 +280,7 @@ export default function Header({ node }) {
         </FlexWrapper> */}
         </Wrapper>
       </NavContainer>
-      <Container>{isHomePage && <Subheader node={node} />}</Container>
+      <Container>{isPage && <Subheader node={node} />}</Container>
     </>
   );
 }

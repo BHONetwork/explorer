@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useTheme } from "utils/hooks";
 
 const Wrapper = styled.div`
-  color: #808191;
+  color: #fff;
   font-size: 14px;
   line-height: 17px;
   margin: 0;

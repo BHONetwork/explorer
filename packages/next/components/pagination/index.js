@@ -42,7 +42,7 @@ const Nav = styled.a`
     p.disabled &&
     css`
       cursor: auto;
-      background: #3c5171 !important;
+      background: transparent !important;
       > svg {
         stroke-opacity: 0.35 !important;
       }
@@ -60,7 +60,7 @@ const Item = styled.a`
   justify-content: center;
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: #808191;
   :hover {
     background: #f4f4f4;
     color: #111111;
@@ -78,7 +78,7 @@ const Item = styled.a`
 const Ellipsis = styled.div`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(255, 255, 255, 0.65);
   & + & {
     display: none;
   }

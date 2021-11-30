@@ -19,7 +19,7 @@ const Title = styled.div`
   font-weight: bold;
   font-size: 12px;
   line-height: 16px;
-  color: rgba(17, 17, 17, 0.35);
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const BlockItem = styled.div`
@@ -87,13 +87,13 @@ const AssetWrapper = styled.div`
 const AssetName = styled.div`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.35);
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const IndexWrapper = styled.div`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(255, 255, 255, 0.65);
   margin-left: auto;
 `;
 

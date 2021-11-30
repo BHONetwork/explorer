@@ -121,7 +121,7 @@ const FieldBody = styled.div`
 const FieldText = styled.p`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(255, 255, 255, 0.65);
 `;
 
 const Links = styled.div`
@@ -149,7 +149,7 @@ const LinkItem = styled.div`
     font-weight: normal;
     font-size: 12px;
     line-height: 16px;
-    color: rgba(17, 17, 17, 0.65);
+    color: rgba(255, 255, 255, 0.65);
   }
   svg {
     margin-left: 8px;

@@ -28,7 +28,7 @@ const ExploreInput = styled.input`
   line-height: 18px;
   outline: none;
   ::placeholder {
-    color: rgba(17, 17, 17, 0.35);
+    color: rgba(255, 255, 255, 0.8);
   }
 `;
 
@@ -54,6 +54,8 @@ const SearchWrapper = styled.div`
   position: relative;
   align-self: flex-start;
   width: 480px;
+  display: flex;
+  height: 100%;
 `;
 
 export default function SearchL({ node }) {
@@ -154,20 +156,22 @@ export default function SearchL({ node }) {
 
   return (
     <ExploreWrapper>
-      <ExploreInput
-        onKeyDown={onKeyDown}
-        value={searchKeyword}
-        onChange={onInput}
-        placeholder="Block / Address / Extrinsic / Asset /..."
-        onFocus={() => setFocus(true)}
-        onBlur={() => setTimeout(() => setFocus(false), 200)}
-      />
-      <SearchHints
-        hints={hintMap.get(searchKeyword)}
-        focus={focus}
-        selected={selected}
-        toPage={toPage}
-      />
+      <SearchWrapper>
+        <ExploreInput
+          onKeyDown={onKeyDown}
+          value={searchKeyword}
+          onChange={onInput}
+          placeholder="Block / Address / Extrinsic / Asset /..."
+          onFocus={() => setFocus(true)}
+          onBlur={() => setTimeout(() => setFocus(false), 200)}
+        />
+        <SearchHints
+          hints={hintMap.get(searchKeyword)}
+          focus={focus}
+          selected={selected}
+          toPage={toPage}
+        />
+      </SearchWrapper>
       <ExploreButton
         node={node}
         onClick={onSearch}

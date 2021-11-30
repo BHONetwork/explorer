@@ -264,7 +264,7 @@ export default function Home({ node, overview: ssrOverview, price }) {
         <Table
           title="Assets"
           head={assetsHead}
-          rowHeight={96}
+          rowHeight={80}
           body={(overview?.popularAssets || []).map((item, index) => [
             <AssetIcon
               key={`${index}-2`}

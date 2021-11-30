@@ -7,8 +7,30 @@ export const nodes = [
   {
     name: "Ulas",
     sub: "Bholdus",
+    value: "mainnet",
+    symbol: "BHO",
+    icon: "/imgs/icons/logo-bholdus.png",
+    color: "#fff",
+    colorSecondary: "#808191",
+    buttonColor: "#3186FD",
+    logo: "logo-img-2.svg",
+  },
+  {
+    name: "Cygnus",
+    sub: "Bholdus",
     value: "testnet",
     symbol: "BHO",
+    icon: "/imgs/icons/logo-bholdus.png",
+    color: "#fff",
+    colorSecondary: "#808191",
+    buttonColor: "#3186FD",
+    logo: "logo-img-2.svg",
+  },
+  {
+    name: "Phoneix",
+    sub: "Bholdus",
+    value: "devnet",
+    symbol: "PHO",
     icon: "/imgs/icons/logo-bholdus.png",
     color: "#fff",
     colorSecondary: "#808191",
@@ -34,7 +56,7 @@ export const transfersLatestHead = [
 ];
 
 export const assetsHead = [
-  { name: "", width: 80 },
+  { name: "Icon", width: 80 },
   { name: "Asset ID", width: 114 },
   { name: "Symbol", width: 136 },
   { name: "Name", width: 152 },

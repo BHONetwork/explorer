@@ -30,7 +30,7 @@ export const text_dark_major = css`
 `;
 
 export const text_dark_minor = css`
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(255, 255, 255, 0.65);
 `;
 
 export const card_border = css`

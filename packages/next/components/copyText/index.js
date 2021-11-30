@@ -17,6 +17,9 @@ const Wrapper = styled.div`
 const StyledIcon = styled(Icon)`
   flex-shrink: 0;
   cursor: pointer;
+  > * {
+    fill: #fff;
+  }
 `;
 
 export default function CopyText({ children, text }) {

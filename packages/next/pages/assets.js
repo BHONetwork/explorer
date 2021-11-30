@@ -2,7 +2,7 @@ import Layout from "components/layout";
 import Nav from "components/nav";
 import Table from "components/table";
 import InLink from "components/inLink";
-import SymbolOnly from "components/symbol";
+import SymbolOnly from "components/symbolOnly";
 import AssetIcon from "components/assetIcon";
 import AddressEllipsis from "components/addressEllipsis";
 import { assetsHead, EmptyQuery } from "utils/constants";
@@ -18,11 +18,13 @@ export default function Assets({ node, assets }) {
         <Nav data={[{ name: "Asset Tracker" }]} node={node} />
         <Table
           head={assetsHead}
+          rowHeight={80}
           body={(assets?.items || []).map((item, index) => [
             <AssetIcon
               key={`${index}-2`}
               assetId={item.assetId}
               destroyedAt={item.destroyedAt}
+              size={48}
             />,
             <InLink
               key={`${index}-1`}

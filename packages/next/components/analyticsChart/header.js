@@ -46,6 +46,7 @@ const RangeItem = styled.div`
   font-size: 12px;
   text-align: center;
   cursor: pointer;
+  color: #000;
   ${(p) =>
     p.active &&
     css`
@@ -57,7 +58,7 @@ const RangeItem = styled.div`
 const Label = styled.div`
   font-size: 13px;
   line-height: 16px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(255, 255, 255, 0.65);
 `;
 
 export default function Header({ symbol, name, range, setRange }) {

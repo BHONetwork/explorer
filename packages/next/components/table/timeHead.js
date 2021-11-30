@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   align-items: center;
   font-size: 14px;
   line-height: 16px;
-  color: rgba(17, 17, 17, 0.35);
+  color: #fff;
 `;
 
 const Item = styled.div`
