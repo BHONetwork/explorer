@@ -36,4 +36,5 @@ yarn-error.log*
 *.pm2.js
 
 *.deploy.sh
+
 .env
