@@ -146,7 +146,7 @@ export const assetTransfersHead = [
 export const assetHoldersHead = [
   { name: "Rank", width: 96 },
   { name: "Address" },
-  { name: "Quantity", align: "right" },
+  { name: "Quantity", width: 300, align: "right" },
 ];
 
 export const blocksHead = [

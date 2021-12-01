@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   font-size: 12px;
   line-height: 16px;
   flex-wrap: nowrap;
+  color: rgb(0, 0, 0, 0.6);
   svg {
     margin-right: 4px;
   }
