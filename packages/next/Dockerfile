@@ -12,7 +12,6 @@ COPY run.sh /app/run.sh
 RUN chmod +x ./run.sh
 # install dependencies
 RUN npm install -g pm2
-RUN npm install
 RUN npm install -g next
-RUN npm run build
+RUN npm install
 CMD ./run.sh

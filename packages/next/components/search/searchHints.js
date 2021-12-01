@@ -6,9 +6,9 @@ import { card_border } from "styles/textStyles";
 const Wrapper = styled.div`
   width: 100%;
   position: absolute;
-  margin-top: 4px;
+  margin-top: 40px;
   max-height: 292px;
-  background: #ffffff;
+  background: #1c2c44;
   ${card_border};
   z-index: 99;
   overflow-y: auto;
@@ -28,15 +28,15 @@ const BlockItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #ffffff;
+  background-color: #0f0fe1;
   cursor: pointer;
   :hover {
-    background-color: #fafafa;
+    background-color: #1c2c44;
   }
   ${(p) =>
     p.selected &&
     css`
-      background-color: #fafafa;
+      background-color: #1c2c44;
     `}
 `;
 
@@ -58,15 +58,15 @@ const AssetItem = styled.div`
   padding: 12px 16px;
   display: flex;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #1c2c43;
   cursor: pointer;
   :hover {
-    background-color: #fafafa;
+    background-color: #1c2c44;
   }
   ${(p) =>
     p.selected &&
     css`
-      background-color: #fafafa;
+      background-color: #1c2c44;
     `}
 `;
 

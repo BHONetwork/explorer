@@ -27,7 +27,7 @@ export const nodes = [
     logo: "logo-img-2.svg",
   },
   {
-    name: "Phoneix",
+    name: "Phoenix",
     sub: "Bholdus",
     value: "devnet",
     symbol: "PHO",
