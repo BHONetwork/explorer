@@ -1,7 +1,9 @@
 const { MongoClient } = require("mongodb");
 
-const mongoUrl = process.env.MONGO_SERVER_URL || "mongodb://mongodb:27017";
-
+const mongoUrl =
+  process.env.MONGO_SERVER_URL ||
+  "mongodb://mongodb:27017";
+console.log(process.env.MONGO_SERVER_URL);
 const statusCollectionName = "status";
 const blockCollectionName = "block";
 const eventCollectionName = "event";

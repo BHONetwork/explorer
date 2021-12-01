@@ -1,0 +1,78 @@
+Arguments: 
+  /Users/naviocean/.nvm/versions/node/v15.14.0/bin/node /Users/naviocean/.nvm/versions/node/v15.14.0/bin/yarn scan
+
+PATH: 
+  /Users/naviocean/miniconda3/condabin:/Users/naviocean/.nvm/versions/node/v15.14.0/bin:/opt/homebrew/bin:/Users/naviocean/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/naviocean/.cargo/bin:/opt/homebrew/opt/fzf/bin
+
+Yarn version: 
+  1.22.15
+
+Node version: 
+  15.14.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  SyntaxError: /Users/naviocean/Working/statescan/packages/scan/package.json: Unexpected token < in JSON at position 655
+      at JSON.parse (<anonymous>)
+      at /Users/naviocean/.nvm/versions/node/v15.14.0/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/naviocean/.nvm/versions/node/v15.14.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/naviocean/.nvm/versions/node/v15.14.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "@statescan/scan",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+      "westmint": "pm2-runtime start ecosystem.config.js --only statescan-scan-westmint --env production",
+      "statemine": "pm2-runtime start ecosystem.config.js --only statescan-scan-statemine --env production",
+      "westmintStaging": "pm2-runtime start ecosystem.config.js --only statescan-scan-westmint-staging --env production",
+      "statemineStaging": "pm2-runtime start ecosystem.config.js --only statescan-scan-statemine-staging --env production",
+      "scan": "node --inspect src/index.js",
+      "test": "jest src"
+    },
+    "dependencies": {
+  <<<<<<< Updated upstream
+      "@bholdus/api-options": "^0.2.0",
+      "@bholdus/types": "^0.1.0",
+      "@polkadot/api": "6.8.1",
+      "bignumber.js": "^9.0.1",
+      "dotenv": "^10.0.0",
+      "lodash.findlast": "^4.6.0",
+      "lodash.last": "^3.0.0",
+      "lodash.omit": "^4.5.0",
+      "log4js": "^6.3.0",
+      "moment-timezone": "^0.5.33",
+      "mongodb": "4.1.2"
+  =======
+      "@polkadot/api": "6.6.2",
+      "bignumber.js": "9.0.1",
+      "dotenv": "10.0.0",
+      "jest": "27.3.1",
+      "lodash.findlast": "4.6.0",
+      "lodash.last": "3.0.0",
+      "lodash.omit": "4.5.0",
+      "log4js": "6.3.0",
+      "moment-timezone": "0.5.34",
+      "mongodb": "4.1.4"
+  >>>>>>> Stashed changes
+    },
+    "devDependencies": {
+      "jest": "^27.1.0"
+    },
+    "jest": {
+      "transformIgnorePatterns": [
+        "node_modules/(?!(@polkadot|@babel)/)"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -15,6 +15,7 @@ const Wrapper = styled.div`
 const FlexWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 160px;
 `;
 
 const Link = styled.span`
@@ -23,17 +24,16 @@ const Link = styled.span`
 
 export default function HeightAge({ node, height, age, isFinalized = true }) {
   const imgUrl = `/imgs/icons/${
-    isFinalized ? "check-green" : "circle-pending"
+    isFinalized ? "check-success" : "check-pending"
   }.svg`;
 
   return (
     <Wrapper>
-      <img src="/imgs/icons/block.svg" alt="" />
-      <FlexWrapper style={{ width: 160, marginLeft: 16 }}>
+      <FlexWrapper>
         <InLink to={`/block/${height}`}>
           <Link>{height.toLocaleString()}</Link>
         </InLink>
-        <FlexWrapper style={{ width: 160, marginTop: 4 }}>
+        <FlexWrapper style={{ marginTop: 8 }}>
           <img src={imgUrl} alt="" style={{ marginRight: 6 }} />
           <MinorText>{timeDuration(age)}</MinorText>
         </FlexWrapper>

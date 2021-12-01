@@ -35,7 +35,7 @@ const FlexWrapper = styled.div`
 `;
 
 const AccessoryText = styled.div`
-  color: rgba(17, 17, 17, 0.35);
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 export default function Extrinsic({

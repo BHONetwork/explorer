@@ -20,13 +20,18 @@ const FlexWrapper = styled.div`
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+  img {
+    margin: 0 12px;
+  }
 `;
 
-const Amount = styled.span`
-  font-size: 14px;
-  font-weight: 500;
-
-  color: #111111;
+const Amount = styled.div`
+  font-size: 18px;
+  line-height: 24px;
+  color: #fff;
+`;
+const FontBold = styled.span`
+  font-weight: 600;
 `;
 
 export default function AmountFromTo({ amount, symbol, from, to, assetId }) {
@@ -34,27 +39,13 @@ export default function AmountFromTo({ amount, symbol, from, to, assetId }) {
     <Wrapper>
       <FlexWrapper>
         <Amount>
-          {amount} <SymbolLink assetId={assetId}>{symbol}</SymbolLink>
+          <FontBold>{amount}</FontBold>{" "}
+          <SymbolLink assetId={assetId}>{symbol}</SymbolLink>
         </Amount>
       </FlexWrapper>
       <FlexWrapper>
         <AddressEllipsis address={from} to={`/account/${from}`} />
-        <svg
-          style={{ marginRight: 12, marginLeft: 12 }}
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M2.66663 8.6665H14L9.99996 4.6665"
-            stroke="#52CC8A"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <img src={`/imgs/arrow.svg`} alt="arrow" />
         <AddressEllipsis address={to} to={`/account/${to}`} />
       </FlexWrapper>
     </Wrapper>

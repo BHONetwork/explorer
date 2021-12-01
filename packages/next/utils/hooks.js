@@ -46,6 +46,21 @@ export function useHomePage() {
   return router.pathname === "/" && router.asPath !== "/404";
 }
 
+export function usePage() {
+  const router = useRouter();
+  return (
+    [
+      "/",
+      "/assets",
+      "/blocks",
+      "/extrinsics",
+      "/events",
+      "/transfers",
+      "/accounts",
+    ].indexOf(router.pathname) !== -1 && router.asPath !== "/404"
+  );
+}
+
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: undefined,

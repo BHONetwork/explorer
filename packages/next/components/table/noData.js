@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   min-height: 184px;
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.35);
+  color: #fff;
   ${(p) =>
     p.isCollapse &&
     css`

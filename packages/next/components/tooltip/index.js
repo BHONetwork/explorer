@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   position: relative;
   font-size: 14px;
   line-height: 16px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(0, 0, 0, 0.8);
   > svg {
     stroke-opacity: 0.65;
   }

@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   ${card_border};
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   > :not(:first-child) {

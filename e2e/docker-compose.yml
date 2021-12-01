@@ -22,6 +22,7 @@ services:
       - ../packages/price:/app
   explorer:
     build: ../packages/next
+    env_file: ../packages/next/.env
     volumes:
       - ../packages/next:/app
     ports:

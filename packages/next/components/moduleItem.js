@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   border-radius: 4px;
   font-size: 14px;
   line-height: 16px;
-  color: #ffffff;
+  color: #000;
   background-color: ${(p) => p.bg ?? "#F22279;"};
 `;
 

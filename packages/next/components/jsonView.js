@@ -3,9 +3,12 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   border: 1px solid #eeeeee;
-  background-color: #ffffff;
+  background-color: #eeeeee;
   padding: 16px;
   overflow-x: auto;
+  > div {
+    background-color: #eeeeee !important;
+  }
 `;
 
 export default function JsonView({ src }) {

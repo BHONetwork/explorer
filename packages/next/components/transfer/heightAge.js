@@ -14,6 +14,7 @@ const Wrapper = styled.div`
 const FlexWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 160px;
 `;
 
 const Link = styled.span`
@@ -28,8 +29,7 @@ export default function HeightAge({
 }) {
   return (
     <Wrapper>
-      <img src="/imgs/icons/transfer.svg" alt="" />
-      <FlexWrapper style={{ width: 160, marginLeft: 16 }}>
+      <FlexWrapper>
         {isEvent ? (
           <InLink to={`/block/${blockHeight}`}>
             <Link>{blockHeight.toLocaleString()}</Link>
@@ -39,9 +39,9 @@ export default function HeightAge({
             <Link>{`${blockHeight.toLocaleString()}-${extrinsicIndex}`}</Link>
           </InLink>
         )}
-        <FlexWrapper style={{ width: 160, marginTop: 4 }}>
+        <FlexWrapper style={{ marginTop: 8 }}>
           <img
-            src="/imgs/icons/check-green.svg"
+            src="/imgs/icons/check-success.svg"
             alt=""
             style={{ marginRight: 6 }}
           />

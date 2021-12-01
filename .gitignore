@@ -9,3 +9,5 @@ log
 packages/next/package-lock.json
 .vscode
 docker-data/*
+.env
+*/.env

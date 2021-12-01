@@ -20,16 +20,20 @@ const Nav = styled.a`
   cursor: pointer;
   width: 30px;
   height: 28px;
-  background: #fafafa;
+  background: #3c5171;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   > svg {
-    stroke-opacity: 0.65;
+    fill: #fff;
+    * {
+      fill: #fff;
+    }
+    stroke-opacity: 0.8;
   }
   :hover {
-    background: #f4f4f4;
+    background: #3c5171;
     > svg {
       stroke-opacity: 1;
     }
@@ -38,7 +42,7 @@ const Nav = styled.a`
     p.disabled &&
     css`
       cursor: auto;
-      background: #fafafa !important;
+      background: transparent !important;
       > svg {
         stroke-opacity: 0.35 !important;
       }
@@ -56,7 +60,7 @@ const Item = styled.a`
   justify-content: center;
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: #808191;
   :hover {
     background: #f4f4f4;
     color: #111111;
@@ -64,7 +68,8 @@ const Item = styled.a`
   ${(p) =>
     p.active &&
     css`
-      background: ${(p) => p.themecolorSecondary} !important;
+      font-weight: 700;
+      background: #017efa !important;
       color: ${(p) => p.themecolor} !important;
       cursor: auto;
     `}
@@ -73,7 +78,7 @@ const Item = styled.a`
 const Ellipsis = styled.div`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(255, 255, 255, 0.65);
   & + & {
     display: none;
   }

@@ -31,7 +31,7 @@ const Input = styled.input`
   background: url("/imgs/icons/search-idle.svg") no-repeat scroll 7px 7px;
 
   ::placeholder {
-    color: rgba(17, 17, 17, 0.35);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   :focus,

@@ -63,7 +63,10 @@ const StyledTd = styled.td`
   border-width: 1px 0 0 1px;
   border-color: #eeeeee;
   background-color: #ffffff;
-
+  color: rgba(0, 0, 0, 0.8) !important;
+  span {
+    color: rgba(0, 0, 0, 0.8) !important;
+  }
   :last-child {
     border-width: 1px 1px 0 1px;
   }

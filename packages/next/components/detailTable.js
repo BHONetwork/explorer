@@ -5,7 +5,7 @@ import { useTheme } from "utils/hooks";
 import { card_border } from "styles/textStyles";
 
 const Wrapper = styled.div`
-  background: #ffffff;
+  background: #1c2c44;
   ${card_border};
   padding: 16px 0px;
 `;

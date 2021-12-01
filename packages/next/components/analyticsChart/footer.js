@@ -18,6 +18,7 @@ const Item = styled.div`
   line-height: 20px;
   display: flex;
   align-items: center;
+  color: #000;
   ${(p) =>
     p.hidden &&
     css`

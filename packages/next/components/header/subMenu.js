@@ -7,8 +7,9 @@ import ArrowDown from "./arrow-down.svg";
 import { useWindowSize } from "utils/hooks";
 import { useTheme } from "utils/hooks";
 import { card_border } from "styles/textStyles";
-
+import BlockchainIcon from "./blockchain.svg";
 const Wrapper = styled.div`
+  padding: 11px 0;
   position: relative;
   :not(:first-child) {
     margin-left: 40px;
@@ -18,6 +19,16 @@ const Wrapper = styled.div`
       margin-left: 0;
     }
   }
+  ${(p) =>
+    p.active &&
+    css`
+      border-radius: 8px;
+      background: linear-gradient(360deg, #3186fd 2.73%, #3065fe 100%);
+      padding: 11px;
+      @media screen and (max-width: 900px) {
+        background: transparent;
+      }
+    `}
 `;
 
 const TitleWrapper = styled.div`
@@ -25,34 +36,35 @@ const TitleWrapper = styled.div`
   font-size: 15px;
   line-height: 20px;
   text-decoration: none;
-  color: #111111;
+  color: #808191;
   cursor: pointer;
-  :hover {
-    color: ${(p) => p.themecolor};
-    > svg {
-      stroke: ${(p) => p.themecolor};
-    }
-  }
   display: flex;
   align-items: center;
-  > svg {
-    stroke: #111111;
-    stroke-width: 1.5;
+  > :first-child {
+    margin-right: 12px;
+  }
+  svg {
+    > * {
+      fill: #808191;
+    }
   }
   ${(p) =>
-    p.isActive &&
+    p.active &&
     css`
-      color: ${(p) => p.themecolor};
-      > svg {
-        stroke: ${(p) => p.themecolor};
+      color: #ffffff;
+      svg {
+        > * {
+          fill: #ffffff;
+        }
+      }
+      @media screen and (max-width: 900px) {
+        background: linear-gradient(360deg, #3186fd 2.73%, #3065fe 100%);
       }
     `}
+
   @media screen and (max-width: 900px) {
     padding: 6px 12px;
     cursor: auto;
-    :hover {
-      color: inherit;
-    }
     > svg {
       display: none;
     }
@@ -74,7 +86,8 @@ const MouseWrapper = styled.div`
 
 const MenuWrapper = styled.div`
   min-width: 136px;
-  background: #ffffff;
+  color: #808191;
+  background-color: #ffffff;
   ${card_border};
   padding: 8px 0;
   @media screen and (max-width: 900px) {
@@ -91,24 +104,20 @@ const MenuItem = styled.div`
   font-weight: 500;
   font-size: 15px;
   line-height: 20px;
-  :hover {
-    background: #fafafa;
-  }
   @media screen and (max-width: 900px) {
     padding: 8px 12px 8px 24px;
-    color: rgba(17, 17, 17, 0.65);
   }
   ${(p) =>
-    p.selected &&
+    p.active &&
     css`
-      background: #fafafa;
+      color: #3186fd;
     `}
 `;
 
 const Divider = styled.div`
   margin: 8px 0;
   height: 1px;
-  background: #f8f8f8;
+  background: #808191;
   @media screen and (max-width: 900px) {
     display: none;
   }
@@ -167,8 +176,33 @@ export default function SubMenu({ closeMenu }) {
   };
 
   return (
-    <Wrapper onMouseOver={onMouseOver} onMouseLeave={onMouseLeave}>
-      <TitleWrapper isActive={isActive} themecolor={theme.color}>
+    <Wrapper
+      onMouseOver={onMouseOver}
+      onMouseLeave={onMouseLeave}
+      active={
+        [
+          "/blocks",
+          "/extrinsics",
+          "/events",
+          "/transfers",
+          "/accounts",
+        ].indexOf(router.pathname) !== -1
+      }
+    >
+      <TitleWrapper
+        isActive={isActive}
+        themecolor={theme.color}
+        active={
+          [
+            "/blocks",
+            "/extrinsics",
+            "/events",
+            "/transfers",
+            "/accounts",
+          ].indexOf(router.pathname) !== -1
+        }
+      >
+        <BlockchainIcon />
         Blockchain
         <ArrowDown />
       </TitleWrapper>
@@ -183,7 +217,7 @@ export default function SubMenu({ closeMenu }) {
                       closeMenu();
                       setIsActive(false);
                     }}
-                    selected={router.pathname === `/${item.value}`}
+                    active={router.pathname === `/${item.value}`}
                   >
                     {item.name}
                   </MenuItem>

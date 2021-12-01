@@ -19,11 +19,11 @@ const Wrapper = styled.div`
 const TextWrapper = styled.div`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.35);
+  color: rgba(255, 255, 255, 0.8);
   text-align: center;
   > :not(:first-child) {
     margin-top: 4px;
-    color: rgba(17, 17, 17, 0.65);
+    color: rgba(255, 255, 255, 0.65);
   }
 `;
 
