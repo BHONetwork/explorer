@@ -28,14 +28,14 @@ const NavWrapper = styled.div`
 const StyledLink = styled.div`
   cursor: pointer;
   text-decoration: none;
-  color: #111111;
+  color: #ffffff;
   :hover {
     color: ${(p) => p.themecolor};
   }
   ::after {
     content: "/";
     margin-left: 8px;
-    color: rgba(17, 17, 17, 0.35);
+    color: #ffffff;
   }
   ${(p) =>
     p.node === "kusama" &&
@@ -51,7 +51,6 @@ const NoLink = styled.div``;
 export default function Nav({ data, node }) {
   const nodeName = nodes.find((item) => item.value === node)?.name;
   const theme = useTheme();
-
   return (
     <Wrapper>
       <NavWrapper node={node} themecolor={theme.color}>

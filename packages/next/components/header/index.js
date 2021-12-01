@@ -3,7 +3,12 @@ import styled, { css } from "styled-components";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import { useOnClickOutside, useWindowSize, useHomePage } from "utils/hooks";
+import {
+  useOnClickOutside,
+  useWindowSize,
+  useHomePage,
+  usePage,
+} from "utils/hooks";
 import Icon from "./icon.svg";
 import IconActive from "./icon-active.svg";
 import NodeSwitcher from "components/nodeSwitcher";
@@ -11,6 +16,30 @@ import Subheader from "./subheader";
 import SearchS from "components/search/search-s";
 import SubMenu from "./subMenu";
 import { useTheme } from "utils/hooks";
+import HomeIcon from "./home.svg";
+import AssetIcon from "./asset.svg";
+const NavContainer = styled.nav`
+  position: relative;
+  padding: 0 2rem;
+  background-color: #fff;
+  @media screen and (max-width: 1200px) {
+    padding: 0 1.5rem;
+  }
+
+  .logo-s {
+    display: none;
+  }
+
+  @media screen and (max-width: 900px) {
+    .logo-full {
+      display: none;
+    }
+
+    .logo-s {
+      display: initial;
+    }
+  }
+`;
 
 const Container = styled.header`
   position: relative;
@@ -54,6 +83,8 @@ const Wrapper = styled.div`
 const FlexWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const IconWrapper = styled.div`
@@ -70,7 +101,7 @@ const IconWrapper = styled.div`
   border: 1px solid #eeeeee;
 
   > svg {
-    stroke: rgba(17, 17, 17, 0.65);
+    stroke: rgba(0, 0, 0, 0.65);
   }
 
   :hover {
@@ -114,10 +145,15 @@ const MenuItem = styled.div`
   line-height: 24px;
   cursor: pointer;
   text-decoration: none;
-  color: #111111;
-
-  :hover {
-    color: ${(p) => p.themecolor};
+  color: #808191;
+  display: flex;
+  justify-content: center;
+  padding: 11px 24px;
+  svg {
+    margin-right: 12px;
+    > * {
+      fill: #808191;
+    }
   }
 
   :not(:first-child) {
@@ -127,8 +163,9 @@ const MenuItem = styled.div`
   @media screen and (max-width: 900px) {
     padding: 6px 12px;
     :hover {
-      color: inherit;
-      background: #fafafa;
+      color: rgba(0, 0, 0, 0.8);
+      /* color: inherit; */
+      /* background: #fafafa; */
     }
 
     :not(:first-child) {
@@ -138,14 +175,40 @@ const MenuItem = styled.div`
     ${(p) =>
       p.selected &&
       css`
-        background: #fafafa;
+        background: #000;
+      `}
+  }
+
+  ${(p) =>
+    p.active &&
+    css`
+      border-radius: 8px;
+      background: linear-gradient(360deg, #3186fd 2.73%, #3065fe 100%);
+      padding: 11px 24px;
+      color: #ffffff;
+      svg {
+        > * {
+          fill: #ffffff;
+        }
+      }
+    `}
+  @media screen and (max-width: 900px) {
+    justify-content: flex-start;
+    svg {
+      display: none;
+    }
+    ${(p) =>
+      p.active &&
+      css`
+        border-radius: 0;
       `}
   }
 `;
 
 export default function Header({ node }) {
   const router = useRouter();
-  const isHomePage = useHomePage();
+  // const isHomePage = useHomePage();
+  const isPage = usePage();
   const [isActive, setIsActive] = useState(false);
   const { width } = useWindowSize();
   const ref = useRef();
@@ -157,63 +220,67 @@ export default function Header({ node }) {
       setIsActive(false);
     }
   }, [width]);
-
+  console.log(router.pathname === "/assets");
   return (
-    <Container>
-      <Wrapper>
-        <FlexWrapper>
-          <IconWrapper
-            isActive={isActive}
-            onClick={() => setIsActive(!isActive)}
-          >
-            {isActive ? <IconActive /> : <Icon />}
-          </IconWrapper>
-          <Link href={`/`} passHref>
-            <img
-              className="logo-full"
-              src="/imgs/logo_explorer.png"
-              alt="logo"
-              style={{ cursor: "pointer" }}
-            />
-          </Link>
-          <Link href={`/`} passHref>
-            <img
-              className="logo-s"
-              src="/imgs/logo_explorer.png"
-              alt="logo"
-              style={{ cursor: "pointer" }}
-            />
-          </Link>
-          {(isActive || width > 900) && (
-            <MenuWrapper ref={ref}>
-              <Link href={`/`} passHref>
-                <MenuItem
-                  themecolor={theme.color}
-                  onClick={() => setIsActive(false)}
-                  selected={router.pathname === "/"}
-                >
-                  Home
-                </MenuItem>
-              </Link>
-              <SubMenu closeMenu={() => setIsActive(false)} />
-              <Link href={`/assets`} passHref>
-                <MenuItem
-                  themecolor={theme.color}
-                  onClick={() => setIsActive(false)}
-                  selected={router.pathname === "/assets"}
-                >
-                  Assets
-                </MenuItem>
-              </Link>
-            </MenuWrapper>
-          )}
-        </FlexWrapper>
-        <FlexWrapper>
+    <>
+      <NavContainer>
+        <Wrapper>
+          <FlexWrapper>
+            <IconWrapper
+              isActive={isActive}
+              onClick={() => setIsActive(!isActive)}
+            >
+              {isActive ? <IconActive /> : <Icon />}
+            </IconWrapper>
+            <Link href={`/`} passHref>
+              <img
+                className="logo-full"
+                src="/imgs/logo.svg"
+                alt="logo"
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
+            <Link href={`/`} passHref>
+              <img
+                className="logo-s"
+                src="/imgs/logo.svg"
+                alt="logo"
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
+            {(isActive || width > 900) && (
+              <MenuWrapper ref={ref}>
+                <Link href={`/`} passHref>
+                  <MenuItem
+                    themecolor={theme.color}
+                    onClick={() => setIsActive(false)}
+                    active={router.pathname === "/"}
+                  >
+                    <HomeIcon className="nav-icon" />
+                    Home
+                  </MenuItem>
+                </Link>
+                <SubMenu closeMenu={() => setIsActive(false)} />
+                <Link href={`/assets`} passHref>
+                  <MenuItem
+                    themecolor={theme.color}
+                    onClick={() => setIsActive(false)}
+                    active={router.pathname === "/assets"}
+                  >
+                    <AssetIcon />
+                    Assets
+                  </MenuItem>
+                </Link>
+              </MenuWrapper>
+            )}
+          </FlexWrapper>
+          {/* <FlexWrapper>
           <SearchS />
-          {/* <NodeSwitcher node={node} /> */}
-        </FlexWrapper>
-      </Wrapper>
-      {isHomePage && <Subheader node={node} />}
-    </Container>
+          <NodeSwitcher node={node} />
+        </FlexWrapper> */}
+        </Wrapper>
+      </NavContainer>
+      <Container>{isPage && <Subheader node={node} />}</Container>
+    </>
   );
 }

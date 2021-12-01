@@ -7,48 +7,58 @@ import TimeHead from "./timeHead";
 import TimeBody from "./timeBody";
 import { useDispatch, useSelector } from "react-redux";
 import { timeTypeSelector, setTimeType } from "store/reducers/preferenceSlice";
-import { p_18_bold, text_dark_major } from "../../styles/textStyles";
+import {
+  p_18_bold,
+  p_20_normal,
+  text_dark_major,
+} from "../../styles/textStyles";
 import JsonDisplay from "components/jsonDisplay";
 import { card_border } from "styles/textStyles";
 
 const Wrapper = styled.div``;
 
 const Title = styled.h4`
-  ${p_18_bold};
-  ${text_dark_major};
-  margin: 0 0 24px;
+  ${p_20_normal};
+  color: #fff;
+  margin: 0 0 16px;
 `;
 
 const StyledTable = styled.table`
   width: 100%;
   table-layout: fixed;
-  background: #ffffff;
-  ${card_border};
+  background: #1c2c44;
+  border-radius: 12px;
   border-spacing: 0px;
 
   thead {
-    background: #fafafa;
+    background: #113162;
     overflow: hidden;
+    th {
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: bold;
+      color: #fff;
+    }
   }
 
   th {
     :first-child {
-      border-top-left-radius: 8px;
-      -moz-border-top-left-radius: 8px;
-      -webkit-border-top-left-radius: 8px;
+      border-top-left-radius: 12px;
+      -moz-border-top-left-radius: 12px;
+      -webkit-border-top-left-radius: 12px;
     }
 
     :last-child {
-      border-top-right-radius: 8px;
-      -moz-border-top-right-radius: 8px;
-      -webkit-border-top-right-radius: 8px;
+      border-top-right-radius: 12px;
+      -moz-border-top-right-radius: 12px;
+      -webkit-border-top-right-radius: 12px;
     }
 
     padding: 16px 24px;
     font-weight: normal;
     font-size: 14px;
     line-height: 16px;
-    color: rgba(17, 17, 17, 0.35);
+    color: rgba(255, 255, 255, 0.8);
     text-align: left;
     position: relative;
   }
@@ -65,17 +75,17 @@ const StyledTable = styled.table`
       padding: 0px 24px;
       font-size: 14px;
       line-height: 20px;
-      color: #111111;
+      color: #ffffff;
     }
   }
 
   tfoot {
     td {
-      border-top: 1px solid #f8f8f8;
+      /* border-top: 1px solid #808191; */
       padding: 14px 24px;
       font-size: 14px;
       line-height: 20px;
-      color: #111111;
+      color: #ffffff;
     }
   }
 `;
@@ -84,29 +94,29 @@ const StyledTr = styled.tr`
   ${(p) =>
     !p.isShow &&
     css`
-      :not(:last-child) {
-        td {
-          position: relative;
+      /* :not(:last-child) { */
+      td {
+        position: relative;
+        .border-bottom {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 1px;
+          background-color: #808191;
+        }
+        :first-child {
           .border-bottom {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 1px;
-            background-color: #f8f8f8;
+            left: 24px;
           }
-          :first-child {
-            .border-bottom {
-              left: 24px;
-            }
-          }
-          :last-child {
-            .border-bottom {
-              right: 24px;
-            }
+        }
+        :last-child {
+          .border-bottom {
+            right: 24px;
           }
         }
       }
+      /* } */
     `}
 `;
 
@@ -158,7 +168,7 @@ const CollapseTableDataItem = styled.pre`
 `;
 
 const CollapseWrapper = styled.div`
-  background: #ffffff;
+  background: #1c2c44;
   ${card_border};
 `;
 
@@ -166,17 +176,17 @@ const CollapseTableWrapper = styled.div`
   padding: 16px 0px;
   width: 100%;
 
-  :not(:last-child) {
-    position: relative;
-    .border-bottom {
-      position: absolute;
-      left: 24px;
-      right: 24px;
-      bottom: 0;
-      height: 1px;
-      background-color: #f8f8f8;
-    }
+  /* :not(:last-child) { */
+  position: relative;
+  .border-bottom {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 0;
+    height: 1px;
+    background-color: #808191;
   }
+  /* } */
 `;
 
 const CollapseTable = styled.table`
@@ -199,7 +209,6 @@ const CollapseBody = styled.td`
 `;
 
 const CollapseFoot = styled.div`
-  border-top: 1px solid #f8f8f8;
   padding: 16px 24px;
 `;
 

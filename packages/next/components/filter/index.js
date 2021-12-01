@@ -9,7 +9,7 @@ import { encodeURIQuery } from "utils";
 import { card_border } from "styles/textStyles";
 
 const Wrapper = styled.div`
-  background: #ffffff;
+  background: #113162;
   ${card_border};
   padding: 19px 23px;
   font-weight: 500;
@@ -50,7 +50,7 @@ const SelectWrapper = styled.div`
 `;
 
 const Button = styled.div`
-  background: #000000;
+  background: linear-gradient(360deg, #3186fd 2.73%, #3065fe 100%);
   border-radius: 6px;
   padding: 6px 24px;
   font-weight: 500;
@@ -185,7 +185,7 @@ export default function Filter({ total, data, allmodulemethods }) {
             <span
               style={{
                 marginLeft: 8,
-                color: "rgba(17, 17, 17, 0.65)",
+                color: "rgba(255, 255, 255, 0.65)",
                 fontWeight: 400,
               }}
             >

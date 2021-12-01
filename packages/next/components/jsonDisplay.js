@@ -17,7 +17,7 @@ const JsonView = dynamic(
 
 const Wrapper = styled.div`
   padding: 24px;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   font-size: 14px;
   line-height: 20px;
@@ -42,7 +42,8 @@ const Button = styled.div`
   cursor: pointer;
   min-width: 48px;
   text-align: center;
-  color: rgba(17, 17, 17, 0.65);
+  color: rgba(0, 0, 0, 0.8);
+  /* color: rgba(255, 255, 255, 0.65); */
   :not(:first-child) {
     margin-left: 8px;
   }

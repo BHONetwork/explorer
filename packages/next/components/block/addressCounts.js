@@ -14,12 +14,13 @@ const FlexWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  font-size: 13px;
+  color: #fff;
 `;
 
 const Label = styled.span`
   margin-right: 8px;
-  font-size: 13px;
-  color: rgba(17, 17, 17, 0.35);
+  color: #808191;
 `;
 
 export default function AddressCounts({

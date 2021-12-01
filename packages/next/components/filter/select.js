@@ -6,6 +6,7 @@ import { card_border } from "styles/textStyles";
 
 const Wrapper = styled.div`
   position: relative;
+  color: #111111;
   @media screen and (max-width: 1100px) {
     flex-grow: 1;
   }
@@ -50,13 +51,17 @@ const SelectWrapper = styled.div`
 const OptionWrapper = styled.div`
   z-index: 99;
   position: absolute;
-  ${card_border};
+  /* ${card_border}; */
+  border-radius: 8px;
   padding: 8px 0;
   background: #ffffff;
   min-width: 160px;
   left: 0;
   top: 40px;
   width: 100%;
+  > :not(:first-child) {
+    border-top: #111111 solid 1px;
+  }
 `;
 
 const OptionItem = styled.div`
@@ -67,6 +72,7 @@ const OptionItem = styled.div`
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
+
   :hover {
     background: #fafafa;
   }

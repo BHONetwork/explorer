@@ -1,26 +1,41 @@
-export const DEFAULT_THEME_COLOR = "#F22279";
-export const DEFAULT_THEME_COLOR_SECONDARY = "#FEE4EF";
-export const DEFAULT_THEME_BUTTON_COLOR = "#F22279";
+export const DEFAULT_THEME_COLOR = "#FFF";
+export const DEFAULT_THEME_COLOR_SECONDARY = "#BCBCBC";
+export const DEFAULT_THEME_BUTTON_COLOR = "#3186FD";
 export const DEFAULT_THEME_LOGO = "logo-img-1.svg";
 
 export const nodes = [
   {
-    name: "Bholdus",
+    name: "Ulas",
     sub: "Bholdus",
-    value: "statemine",
+    value: "mainnet",
     symbol: "BHO",
     icon: "/imgs/icons/logo-bholdus.png",
-    color: "#3765DC",
-    colorSecondary: "#EAF0FF",
-    buttonColor: "#000000",
+    color: "#fff",
+    colorSecondary: "#808191",
+    buttonColor: "#3186FD",
     logo: "logo-img-2.svg",
   },
   {
-    name: "Westmint",
-    sub: "Westend",
-    value: "westmint",
-    symbol: "WND",
-    icon: "/imgs/icons/westend.svg",
+    name: "Cygnus",
+    sub: "Bholdus",
+    value: "testnet",
+    symbol: "BHOT",
+    icon: "/imgs/icons/logo-bholdus.png",
+    color: "#fff",
+    colorSecondary: "#808191",
+    buttonColor: "#3186FD",
+    logo: "logo-img-2.svg",
+  },
+  {
+    name: "Phoenix",
+    sub: "Bholdus",
+    value: "devnet",
+    symbol: "PHO",
+    icon: "/imgs/icons/logo-bholdus.png",
+    color: "#fff",
+    colorSecondary: "#808191",
+    buttonColor: "#3186FD",
+    logo: "logo-img-2.svg",
   },
 ];
 
@@ -41,13 +56,14 @@ export const transfersLatestHead = [
 ];
 
 export const assetsHead = [
-  { name: "Asset ID", width: 136 },
-  { name: "Symbol", width: 152 },
-  { name: "Name", width: 200 },
+  { name: "Icon", width: 80 },
+  { name: "Asset ID", width: 114 },
+  { name: "Symbol", width: 136 },
+  { name: "Name", width: 152 },
   { name: "Owner", width: 152 },
   { name: "Issuer", width: 152 },
-  { name: "Holders", width: 152, align: "right" },
-  { name: "Total Supply", align: "right" },
+  { name: "Holders", width: 136, align: "center" },
+  { name: "Total Supply", align: "center" },
 ];
 
 export const nftsHead = [
@@ -130,7 +146,7 @@ export const assetTransfersHead = [
 export const assetHoldersHead = [
   { name: "Rank", width: 96 },
   { name: "Address" },
-  { name: "Quantity", align: "right" },
+  { name: "Quantity", width: 300, align: "right" },
 ];
 
 export const blocksHead = [

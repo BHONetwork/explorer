@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "statescan-next",
+      name: "bholdus-dev",
       script: "server.js",
       log_date_format: "YYYY-MM-DD HH:mm Z",
       watch: true,
@@ -18,7 +18,7 @@ module.exports = {
       },
     },
     {
-      name: "statescan-next-prod",
+      name: "bholdus-prod",
       script: "yarn",
       interpreter: "bash",
       args: "start",

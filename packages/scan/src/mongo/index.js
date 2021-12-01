@@ -78,6 +78,8 @@ async function getCollection(colName) {
 
 async function initDb() {
   console.log("Init db");
+  console.log(mongoUrl);
+  // process.exit();
   client = await MongoClient.connect(mongoUrl, {
     useUnifiedTopology: true,
   });

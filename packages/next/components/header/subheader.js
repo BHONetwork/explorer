@@ -6,7 +6,7 @@ import SearchL from "components/search/search-l";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin: 40px 0 16px;
 
   > :not(:first-child) {
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   }
 
   @media screen and (max-width: 900px) {
-    align-items: stretch;
+    align-items: center;
     margin: 24px 0 0;
     > :not(:first-child) {
       margin-top: 24px;
@@ -31,7 +31,8 @@ const Title = styled.h1`
   font-weight: bold;
   font-size: 32px;
   line-height: 32px;
-  color: #111111;
+  text-transform: uppercase;
+  color: #fff;
   margin: 0;
   white-space: nowrap;
   @media screen and (max-width: 900px) {
@@ -42,7 +43,6 @@ const Title = styled.h1`
 
 export default function Subheader({ node }) {
   const [name, setName] = useState();
-
   useEffect(() => {
     setName(nodes.find((item) => item.value === node)?.name);
   }, [node]);

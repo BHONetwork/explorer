@@ -9,8 +9,9 @@ WORKDIR /app
 # copy source files
 COPY . /app
 # install dependencies
-RUN npm install
 RUN npm install pm2@latest -g
+RUN npm install
+RUN npm install dotenv
 
 COPY run.sh /app/run.sh
 

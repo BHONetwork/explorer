@@ -51,7 +51,7 @@ const Text = styled.p`
 const Sub = styled.p`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.35);
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const ArrowDown = styled.img`

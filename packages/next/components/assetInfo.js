@@ -42,12 +42,12 @@ const SymbolWrapper = styled.div`
     font-weight: bold;
     font-size: 24px;
     line-height: 24px;
-    color: #111111;
+    color: #ffffff;
   }
   .name {
     font-size: 14px;
     line-height: 20px;
-    color: rgba(17, 17, 17, 0.35);
+    color: rgba(255, 255, 255, 0.8);
   }
 `;
 
@@ -64,7 +64,7 @@ const RightWrapper = styled.div`
   }
   .content {
     line-height: 20px;
-    color: rgba(17, 17, 17, 0.65);
+    color: rgba(255, 255, 255, 0.65);
     word-wrap: break-word;
     text-align: justify;
     font-size: 14px;
@@ -72,7 +72,7 @@ const RightWrapper = styled.div`
   .noinfo {
     font-size: 14px;
     line-height: 20px;
-    color: rgba(17, 17, 17, 0.2);
+    color: rgba(255, 255, 255, 0.5);
   }
 `;
 

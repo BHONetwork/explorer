@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   font-size: 12px;
   line-height: 16px;
   flex-wrap: nowrap;
+  color: rgb(0, 0, 0, 0.6);
   svg {
     margin-right: 4px;
   }
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
   }
 
   > div:nth-child(3) {
-    color: rgba(17, 17, 17, 0.35);
+    color: #fff;
   }
 
   > div {

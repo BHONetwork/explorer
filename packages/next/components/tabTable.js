@@ -51,11 +51,11 @@ const TabText = styled.div`
   font-weight: bold;
   font-size: 18px;
   line-height: 18px;
-  color: rgba(17, 17, 17, 0.65);
+  color: #fff;
   ${(p) =>
     p.active &&
     css`
-      color: #111111;
+      color: #fff;
     `}
 `;
 

@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: stretch;
   min-height: 114px;
+
   :first-child {
     .top-line {
       visibility: hidden;
@@ -54,6 +55,7 @@ const ItemWrapper = styled.div`
   align-items: flex-start;
   margin-top: 16px;
   flex-grow: 1;
+  color: rgb(0, 0, 0, 0.6);
   @media screen and (max-width: 900px) {
     flex-direction: column;
     align-items: stretch;
@@ -64,9 +66,11 @@ const BoldText = styled.p`
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
+  color: rgb(0, 0, 0, 0.9);
 `;
 
 const TimelineHeader = styled.div`
+  color: rgb(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   padding: 10px 48px 24px 0;
@@ -95,6 +99,7 @@ const TimelineFields = styled.div`
 const FiledWrapper = styled.div`
   display: flex;
   flex-grow: 1;
+
   @media screen and (max-width: 900px) {
     flex-direction: column;
   }
@@ -113,6 +118,13 @@ const FieldBody = styled.div`
   flex-grow: 1;
   padding: 8px 0 8px 24px;
   font-size: 14px;
+  color: rgb(0, 0, 0, 0.6);
+  span {
+    > * {
+      color: rgb(0, 0, 0, 0.6) !important;
+      font-weight: 600;
+    }
+  }
   @media screen and (max-width: 900px) {
     padding-left: 0px;
   }
@@ -121,7 +133,8 @@ const FieldBody = styled.div`
 const FieldText = styled.p`
   font-size: 14px;
   line-height: 20px;
-  color: rgba(17, 17, 17, 0.65);
+  /* color: rgba(255, 255, 255, 0.65); */
+  color: rgb(0, 0, 0, 0.6);
 `;
 
 const Links = styled.div`
@@ -149,7 +162,8 @@ const LinkItem = styled.div`
     font-weight: normal;
     font-size: 12px;
     line-height: 16px;
-    color: rgba(17, 17, 17, 0.65);
+    /* color: rgba(255, 255, 255, 0.65); */
+    color: rgb(0, 0, 0, 0.6);
   }
   svg {
     margin-left: 8px;

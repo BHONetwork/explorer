@@ -7,7 +7,7 @@ const Wrapper = styled.p`
   display: flex;
   align-items: center;
   ${p_12_normal};
-  ${text_dark_minor};
+  color: rgb(0, 0, 0, 0.6);
   svg {
     margin-right: 4px;
   }
