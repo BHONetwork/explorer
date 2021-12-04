@@ -4,7 +4,7 @@ services:
     build:
       context: ../../bholdus-chain
       dockerfile: Dockerfile.release
-    command: bash -c "/usr/local/bin/bholdus --dev --ws-external"
+    command: bash -c "/usr/local/bin/bholdus  --chain=phoenix-dev --tmp --alice --rpc-cors all --ws-external"
     ports:
       - 9944:9944
 
