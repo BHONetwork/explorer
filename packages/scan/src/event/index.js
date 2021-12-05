@@ -5,7 +5,7 @@ const { handleAssetsEvent } = require("./assets");
 const { handleBalancesEvent } = require("./balance");
 const { handleExecutedDownwardEvent } = require("./dmpQueue");
 const { handleSystemEvent } = require("./system");
-const { handleXcmAttemptedEvent } = require("./polkadotXcm");
+const { handleCrosschainEvent } = require("./crosschain");
 const { handleNFTsEvent } = require("./nft");
 
 async function handleEvents(events, blockIndexer, extrinsics) {
@@ -57,7 +57,8 @@ async function handleEvents(events, blockIndexer, extrinsics) {
         extrinsicHash,
         blockIndexer
       );
-      await handleXcmAttemptedEvent(
+  
+      await handleCrosschainEvent(
         event,
         sort,
         extrinsicIndex,
