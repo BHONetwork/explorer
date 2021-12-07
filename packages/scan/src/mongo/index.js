@@ -24,6 +24,7 @@ const nftTokenCollectionName = "nftToken";
 const nftDataCollectionName = "nftData";
 const nftGroupOwnerCollectionName = "nftGroupOwner";
 const nftTransferCollectionName = "nftTransfer";
+const crosschainTransactionCollectionName = "crosschainTransaction";
 
 // unFinalized collection names
 const unFinalizedCollectionName = "unFinalizedBlock";
@@ -107,6 +108,10 @@ async function initDb() {
   nftDataCol = await getCollection(nftDataCollectionName);
   nftGroupOwnerCol = await getCollection(nftGroupOwnerCollectionName);
   nftTransferCol = await getCollection(nftTransferCollectionName);
+
+  // Crosschain
+  crosschainTransactionCol = getCollection(crosschainTransactionCollectionName);
+
 
   unFinalizedBlockCol = await getCollection(unFinalizedCollectionName);
   unFinalizedExtrinsicCol = await getCollection(
@@ -241,6 +246,12 @@ async function getNftTransferCollection() {
   return nftTransferCol;
 }
 
+// Crosschain
+async function getCrosschainTransactionCollection() {
+  await tryInit(crosschainTransactionCol);
+  return crosschainTransactionCol;
+}
+
 module.exports = {
   initDb,
   getStatusCollection,
@@ -264,4 +275,5 @@ module.exports = {
   getNFTDataCollection,
   getNFTGroupOwnerCollection,
   getNftTransferCollection,
+  getCrosschainTransactionCollection,
 };

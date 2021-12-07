@@ -4,6 +4,7 @@ const Modules = Object.freeze({
   Assets: "assets",
   Tokens: "tokens",
   NFT: "nft",
+  CrossChain: "crosschain",
 });
 
 const SystemEvents = Object.freeze({
@@ -55,10 +56,40 @@ const NFTEvents = Object.freeze({
   BurnedToken: "BurnedToken",
 });
 
+// Crosschain
+const CrossChainEvents = Object.freeze({
+  InboundTokenReleased: "InboundTokenReleased",
+});
+
+const CrossChainTransferType = Object.freeze({
+  Deposit: "deposit",
+  Withdrawal: "withdrawal",
+});
+
+const CrossChainAssetType = Object.freeze({
+  Native: "native",
+  DigitalAsset: "digital_asset",
+});
+
+const CrossChainNetwork = Object.freeze({
+  BSC: "BSC",
+});
+
+const CrossChainTransferStatus = Object.freeze({
+  Pending: "pending",
+  Confirmed: "confirmed",
+  Failed: "failed",
+});
+
 module.exports = {
   Modules,
   SystemEvents,
   BalancesEvents,
   AssetsEvents,
   NFTEvents,
+  CrossChainEvents,
+  CrossChainAssetType,
+  CrossChainTransferType,
+  CrossChainTransferStatus,
+  CrossChainNetwork,
 };
