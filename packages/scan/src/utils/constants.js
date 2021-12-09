@@ -59,6 +59,7 @@ const NFTEvents = Object.freeze({
 // Crosschain
 const CrossChainEvents = Object.freeze({
   InboundTokenReleased: "InboundTokenReleased",
+  OutboundTransferInitiated: "OutboundTransferInitiated",
 });
 
 const CrossChainTransferType = Object.freeze({

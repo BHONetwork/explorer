@@ -9,6 +9,7 @@ const Modules = Object.freeze({
 
 const bridgeNativeTransferEvents = Object.freeze({
   InboundTokenReleased: "InboundTokenReleased",
+  OutboundTransferInitiated: "OutboundTransferInitiated",
 });
 
 function isCrosschainEvent(section) {
@@ -30,9 +31,9 @@ async function handleCrosschainEvent(
 
   const eventData = data.toJSON();
 
-  // Deposit
+  // Deposit from BSC to BHC
   if ([bridgeNativeTransferEvents.InboundTokenReleased].includes(method)) {
-    console.log('Handle deposit event:'+JSON.stringify(event));
+    console.log('Handle crosschain deposit event:'+JSON.stringify(event));
     const [inbound_transfer_id, from, to, amount] = eventData;
     const session = asyncLocalStorage.getStore();
     const col = await getCrosschainTransactionCollection();
@@ -42,8 +43,33 @@ async function handleCrosschainEvent(
       eventSort,
       extrinsicIndex,
       extrinsicHash,
-      transferId: inbound_transfer_id.toString(),
+      inboundTransferId: inbound_transfer_id.toString(),
       transferType: CrossChainTransferType.Deposit,
+      assetType: CrossChainAssetType.Native,
+      network: CrossChainNetwork.BSC,
+      assetId: null,
+      from: from.toString(),
+      to: to.toString(),
+      amount: toDecimal128(amount),
+      status: CrossChainTransferStatus.Confirmed,
+    },
+    { session });
+  }
+
+  // Withdrawal from BHC to BSC
+  if ([bridgeNativeTransferEvents.OutboundTransferInitiated].includes(method)) {
+    console.log('Handle crosschain withdrawal event:'+JSON.stringify(event));
+    const [outbound_transfer_id, from, to, amount] = eventData;
+    const session = asyncLocalStorage.getStore();
+    const col = await getCrosschainTransactionCollection();
+    const result = await col.insertOne(
+    {
+      indexer: blockIndexer,
+      eventSort,
+      extrinsicIndex,
+      extrinsicHash,
+      outboundTransferId: outbound_transfer_id.toString(),
+      transferType: CrossChainTransferType.Withdrawal,
       assetType: CrossChainAssetType.Native,
       network: CrossChainNetwork.BSC,
       assetId: null,
