@@ -2,6 +2,9 @@ const { getCrosschainTransactionCollection } = require("../../mongo");
 const asyncLocalStorage = require("../../asynclocalstorage");
 const { CrossChainTransferType, CrossChainAssetType, CrossChainNetwork, CrossChainTransferStatus } = require("../../utils/constants");
 const { toDecimal128 } = require("../../utils");
+const {
+  getBlockNativeTransfers,
+} = require("../../store/blockNativeTokenTransfers");
 
 const Modules = Object.freeze({
   bridgeNativeTransfer: "bridgeNativeTransfer",
@@ -30,7 +33,16 @@ async function handleCrosschainEvent(
   }
 
   const eventData = data.toJSON();
+  // const transfer = getTransferByHash(blockIndexer.blockHeight, extrinsicHash);
+  const blockTransfers = getBlockNativeTransfers(blockIndexer.blockHeight);
+  const assetTransfers = blockTransfers.filter((item)=> item.extrinsicHash === extrinsicHash);
+  if (assetTransfers.length <= 0) {
+    console.error('Cannot find native asset transfer with extrinsic hash:'+ extrinsicHash);
+    return;
+  }
 
+  const relatedAssetTransfer = assetTransfers[0];
+  
   // Deposit from BSC to BHC
   if ([bridgeNativeTransferEvents.InboundTokenReleased].includes(method)) {
     console.log('Handle crosschain deposit event:'+JSON.stringify(event));
@@ -54,6 +66,9 @@ async function handleCrosschainEvent(
       status: CrossChainTransferStatus.Confirmed,
     },
     { session });
+
+    relatedAssetTransfer.isCrosschain = true;
+    relatedAssetTransfer.crosschainTx = result.insertedId;
   }
 
   // Withdrawal from BHC to BSC
@@ -79,6 +94,9 @@ async function handleCrosschainEvent(
       status: CrossChainTransferStatus.Confirmed,
     },
     { session });
+
+    relatedAssetTransfer.isCrosschain = true;
+    relatedAssetTransfer.crosschainTx = result.insertedId;
   }
 
   return true;
